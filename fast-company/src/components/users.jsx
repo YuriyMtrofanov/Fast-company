@@ -1,14 +1,60 @@
-import React from "react";
+import React, {useState} from "react";
 import api from "../api";
 import "bootstrap/dist/css/bootstrap.css"
 
+function handleDeleteElement(){
+    console.log('click')
+    // const [del, setDelete] = useState(0)
+}
 
+function getQualities(arr){
+    {/* В этом месте каждый дочерний эдемент должен иметь уникальный ключ, но он не присваеваеися почему-то */}
+    return arr.map(quality => {
+        console.log((quality.color))
+        return (
+            <span 
+                key = {quality._id} 
+                className = { getQualityClasses(quality) }
+            >
+                { quality.name }
+            </span>
+        )
+    })
+}
+
+function getQualityClasses(array){
+    let classes = 'badge m-1 badge bg-'
+    classes += array.color
+    return classes
+}
+
+function createLine(){
+    const allUsers = api.users.fetchAll()
+    return allUsers.map((line)=>{
+        // console.log()
+        return (
+            <>
+            {/* В этом месте каждый дочерний эдемент должен иметь уникальный ключ, но он не присваеваеися почему-то */}
+                <tr key = {line._id}>    
+                    <td>{ line.name }</td>
+                    <td> 
+                        <h6>
+                            { getQualities(line.qualities) }
+                        </h6>
+                    </td>
+                    <td>{ line.profession.name }</td>
+                    <td>{ line.completedMeetings }</td>
+                    <td>{ line.rate }/5</td>
+                    <td>
+                        <button type="button" className="btn btn-danger" onClick = { handleDeleteElement }>Delete</button>
+                    </td>
+                </tr>
+            </>
+        )
+    })
+}
 
 function createTable(){
-    const userName = api.users.fetchAll()[0].name
-    const userProfession = api.users.fetchAll()[0].profession.name
-    const completedMeetings = api.users.fetchAll()[0].completedMeetings
-    const userRate = api.users.fetchAll()[0].rate
     return (
         <>
             <table className="table table-striped">
@@ -22,40 +68,18 @@ function createTable(){
                         <th scope="col"></th>
                     </tr>
                 </thead>
-
-                {/* Данная строка уже должна рендериться с помощью функции и метода map() */}
                 <tbody>
-                    <tr>
-                        <td>{ userName }</td>
-                        <td> 'вызов ф-ии getQualities()' </td>
-                        <td>{ userProfession }</td>
-                        <td>{ completedMeetings }</td>
-                        <td>{ userRate }</td>
-                        <td>
-                            <button type="button" className="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
+                    { createLine() }
                 </tbody>
             </table>
         </>
     )
 }
 
-function getQualities(){
-    const userQualities = api.users.fetchAll()[0].qualities
-        userQualities.map((quality) => {
-            // return (
-            //     <li key = {quality._id} className = 'btn btn-primary btn-sm m-2'> 
-            //             {quality.name}
-            //     </li>
-            // )  
-        })
-}
 
 const Users = () => {
-    // console.log(api.users.fetchAll()[0].qualities[0]
-    // )
-    getQualities()
+
+    // createLine()
     return createTable()
 }
 
