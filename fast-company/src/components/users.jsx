@@ -1,10 +1,16 @@
-import React, {useState} from "react";
-import api from "../api";
-import "bootstrap/dist/css/bootstrap.css"
+import React from "react";
+import User from "./user"
+// import api from "../api";
+// import "bootstrap/dist/css/bootstrap.css"
 
+export const Users = ({ users, ...rest }) => {
+     return( users ) 
+}
+
+/*
 export const Users = () => {
 
-    const [usersAll, setUsersAll] = useState(api.users.fetchAll())
+    // const [usersAll, setUsersAll] = useState(api.users.fetchAll())
     
     const createHeader = () => {
 
@@ -57,11 +63,11 @@ export const Users = () => {
         
         return usersAll.map((person)=>{
 
-            const handleDeleteElement = () => {
+            const handleDeleteElement = (userId) => {
 
                 // В результате вызова данного метода мы сохраняем в массиве только те элементы, которые
                 // не равны "person._id" (то есть не равны id полученного элемента при нажатии на кнопку)
-                setUsersAll(prevState => prevState.filter((element) => element._id !== person._id))
+                setUsersAll(usersAll.filter((user) => user._id !== userId))
 
                     //     const foundIndex = usersAll.findIndex((element) => {
                     //         return element._id === person._id
@@ -117,3 +123,4 @@ export const Users = () => {
 
     return createTable()
 }
+*/
