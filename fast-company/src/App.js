@@ -21,42 +21,18 @@ export function App(){
         setUsersList(currentUsersList)
     }
 
-    const createThead = () => {
-        if (usersList.length !== 0) 
-        return (
-             <tr>
-                 <th scope="col">Имя</th>
-                 <th scope="col">Качества</th>
-                 <th scope="col">Профессия</th>
-                 <th scope="col">Встретился, раз</th>
-                 <th scope="col">Оценка</th>
-                 <th scope="col">Закладки</th>
-                 <th scope="col"></th>
-             </tr>
-    )}
-
     return( 
         <>  
             <h1>
                 <SearchStatus
                     length = {usersList.length}
                 />
-            </h1>    
-            <table className="table table-striped">
-                <thead>
-                    { createThead() }
-                </thead>
-                <tbody>
-                    {usersList.map(user => (
-                        <Users
-                            key={user._id}
-                            {...user}
-                            onDelete = {handleDelete}
-                            onBookMark = {handleBoookMark}
-                        />
-                    ))}
-                </tbody>
-            </table>
+            </h1>
+                <Users 
+                    users = {usersList}     // передаю данные по всем юзерам
+                    onDelete = {handleDelete}
+                    onBookMark = {handleBoookMark}
+                />
         </>
       )
 }
