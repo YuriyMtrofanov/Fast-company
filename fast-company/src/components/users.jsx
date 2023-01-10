@@ -37,7 +37,7 @@ export const Users = ({ users, ...rest }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {/*           {users.map(user => (            */}
+                        {/*     {users.map(user => (    */}
                         {usersCropp.map((user) => (
                             <User key={user._id} {...user} {...rest} />
                         ))}

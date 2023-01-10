@@ -1,11 +1,17 @@
 import React from "react";
+import PropTypes from "prop-types";
 
-export const Qualitie = (qualitie) => {
-    const getQualityClasses = (array) => {
+export const Qualitie = ({ name, color }) => {
+    const getQualityClasses = () => {
         let classes = "badge m-1 badge bg-";
-        classes += array.color;
+        classes += color;
         return classes;
     };
 
-    return <span className={getQualityClasses(qualitie)}>{qualitie.name}</span>;
+    return <span className={getQualityClasses()}>{name}</span>;
+};
+
+Qualitie.propTypes = {
+    name: PropTypes.string.isRequired,
+    color: PropTypes.string.isRequired
 };
