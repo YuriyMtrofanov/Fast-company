@@ -21,7 +21,7 @@ module.exports = {
 
         // Ошибка: Missing space before function parentheses
         // Отсутствие пробела перед скобками при обозначении функции
-        "space-before-function-paren": ["error", "never"],
+        "space-before-function-paren": ["error", {anonymous: "always", named: "never"}],
 
         // Ошибка: Strings must use singlequote
         // Строковые значения оформляются одинарными кавычками
