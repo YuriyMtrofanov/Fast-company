@@ -13,10 +13,6 @@ export const GroupList = ({
             {Object.keys(items).map((item) => (
                 <li
                     key = { items[item][valueProperty] }
-                    // динамически меняем класс выделенного элемента списка, чтобы его подсветить
-                    // здесь мы сравниваем объекты: если выбранный объект равен отренедренному, то
-                    // к его классу добавляется "active" и пункт подсвечивается, в противном случае
-                    // класс остается "list-group-item" и не подсвечивается
                     className = {"list-group-item " + (items[item] === selectedItem ? "active" : "")}
                     onClick = {() => onItemSelect(items[item])}
                     role = "button"

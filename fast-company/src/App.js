@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Users } from "./components/users.jsx";
-// import { SearchStatus } from "./components/searchStatus.jsx";
 import api from "./api";
 
 export function App() {
@@ -25,11 +24,8 @@ export function App() {
 
     return (
         <>
-            {/* <h1>
-                <SearchStatus length={usersList.length} />
-            </h1> */}
             <Users
-                users={usersList} // передаю данные по всем юзерам
+                users={usersList}
                 onDelete={handleDelete}
                 onBookMark={handleBoookMark}
             />
