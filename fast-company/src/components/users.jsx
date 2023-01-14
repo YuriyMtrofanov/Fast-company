@@ -33,6 +33,7 @@ export const Users = ({ users, ...rest }) => {
     // при изменении фильтра принудительно сбросим номер страницы до 1:
     useEffect(() => {
         setCurrentPage(1);
+        console.log(selectedProperty);
     }, [selectedProperty]);
 
     // Функция-обработчик события выбора номера страницы в <Pagination/>
@@ -41,7 +42,6 @@ export const Users = ({ users, ...rest }) => {
     };
 
     const handleItemSelect = (params) => { // Реализуем функцию-обработчик для выбора нужного для фильтрации параметра
-        console.log("selectedProperty", params); // передаем некий параметр, который и выводим в консоль
         setSelectedProperty(params); // так как при клике на компонент мы получаем объект с данными
     };
 
@@ -51,7 +51,7 @@ export const Users = ({ users, ...rest }) => {
     // filteredUsers, компоненты которого удовлетворяют условию (user.profession === selectedProperty)
     // т.е. мы оставляем компоненты у которых есть выбранное свойство selectedProperty
     const filteredUsers = selectedProperty
-        ? users.filter(user => user.profession === selectedProperty)
+        ? users.filter(user => user.profession._id === selectedProperty)
         : users;
 
     // кол-во пользователей выделим в отдельную переменную. При этом количество юзеров мы вычисляем после фильтрации
@@ -129,4 +129,5 @@ export const Users = ({ users, ...rest }) => {
 
 Users.propTypes = {
     users: PropTypes.arrayOf(PropTypes.object)
+    // selectedProperty: PropTypes.string
 };

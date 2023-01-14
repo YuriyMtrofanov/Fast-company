@@ -1,10 +1,19 @@
 import React, { useState } from "react";
 import { Users } from "./components/users.jsx";
-// import { SearchStatus } from "./components/searchStatus.jsx";
 import api from "./api";
 
 export function App() {
-    const [usersList, setUsersList] = useState(api.users.fetchAll());
+    const [usersList, setUsersList] = useState(
+        api.users.fetchAll()
+    );
+
+    // Данный хук пока чато неюзабелен. Онвыводит только usersList в консоль
+    // useEffect(() => {
+    //     api.users.fetchAllAlt().then(data =>
+    //         // setUsersList(data)
+    //         console.log(data)
+    //     );
+    // }, []);
 
     const handleBoookMark = (userId) => {
         const usersListBM = usersList.map((user) => {
@@ -25,9 +34,6 @@ export function App() {
 
     return (
         <>
-            {/* <h1>
-                <SearchStatus length={usersList.length} />
-            </h1> */}
             <Users
                 users={usersList} // передаю данные по всем юзерам
                 onDelete={handleDelete}
