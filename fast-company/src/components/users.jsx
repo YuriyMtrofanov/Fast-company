@@ -20,15 +20,15 @@ export const Users = ({ users, ...rest }) => {
 
     useEffect(() => {
         setCurrentPage(1);
-        console.log(selectedProperty);
+        // console.log(selectedProperty);
     }, [selectedProperty]);
 
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
     };
 
-    const handleItemSelect = (params) => { // Реализуем функцию-обработчик для выбора нужного для фильтрации параметра
-        setSelectedProperty(params); // так как при клике на компонент мы получаем объект с данными
+    const handleItemSelect = (params) => {
+        setSelectedProperty(params);
     };
 
     const filteredUsers = selectedProperty
@@ -45,8 +45,7 @@ export const Users = ({ users, ...rest }) => {
 
     return (
         <div className="d-flex">
-            {professions && // Так как запрос данных асинхронный, то при вызове компонента
-            // сначала нужно проверить а есть ли данные для рендеринга компонента
+            {professions &&
                 <div className="d-flex flex-column flex-shrink-0 p-3">
                     <GroupList
                         items = { professions }
@@ -100,5 +99,4 @@ export const Users = ({ users, ...rest }) => {
 
 Users.propTypes = {
     users: PropTypes.arrayOf(PropTypes.object)
-    // selectedProperty: PropTypes.string
 };

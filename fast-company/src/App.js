@@ -30,15 +30,13 @@ export function App() {
 
     return (
         <>
-            {usersList && // Так как запрос данных асинхронный, то при вызове компонента
-            // сначала нужно проверить а есть ли данные для рендеринга компонента
+            {usersList &&
                 <Users
-                    users = { usersList } // передаю данные по всем юзерам
+                    users = { usersList }
                     onDelete = { handleDelete }
                     onBookMark = { handleBoookMark }
                 />
             }
-
         </>
     );
 };
