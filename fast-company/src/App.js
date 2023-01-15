@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Users } from "./components/users.jsx";
 import api from "./api";
 
 export function App() {
-    const [usersList, setUsersList] = useState(api.users.fetchAll());
+    const [usersList, setUsersList] = useState();
+
+    useEffect(() => {
+        api.users.fetchAll().then(data => {
+            setUsersList(data);
+        });
+    }, []);
 
     const handleBoookMark = (userId) => {
         const usersListBM = usersList.map((user) => {
@@ -24,11 +30,15 @@ export function App() {
 
     return (
         <>
-            <Users
-                users={usersList}
-                onDelete={handleDelete}
-                onBookMark={handleBoookMark}
-            />
+            {usersList && // Так как запрос данных асинхронный, то при вызове компонента
+            // сначала нужно проверить а есть ли данные для рендеринга компонента
+                <Users
+                    users = { usersList } // передаю данные по всем юзерам
+                    onDelete = { handleDelete }
+                    onBookMark = { handleBoookMark }
+                />
+            }
+
         </>
     );
 };
