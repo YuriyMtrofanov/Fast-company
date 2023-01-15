@@ -75,7 +75,8 @@ export const Users = ({ users, ...rest }) => {
     // в соответствии с разбиением контента на страницы
     return (
         <div className="d-flex">
-            {professions &&
+            {professions && // Так как запрос данных асинхронный, то при вызове компонента
+            // сначала нужно проверить а есть ли данные для рендеринга компонента
                 <div className="d-flex flex-column flex-shrink-0 p-3">
                     <GroupList
                         items = { professions } // значение основного параметра, по которому будем фильтровать компоненты
