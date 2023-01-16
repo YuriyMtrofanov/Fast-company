@@ -13,7 +13,8 @@ export const Users = ({ users, ...rest }) => {
 
     // Для реализации пагинации и отображения требуемой страници, зададим состояние:
     const [currentPage, setCurrentPage] = useState(1); // по умолчанию отображается 1я страница т.к. мы задаем начальное состояние = 1
-    const [professions, setProfessions] = useState(); //  Реализуем получение данных о профессиях по api
+    const [professions, setProfessions] = useState(); //  Реализуем получение данных о профессиях по api. На основе этих данных будет рендериться
+    // список профессий
     const [selectedProperty, setSelectedProperty] = useState(); // зададим состояние выбранной в текущий момент страницы и
     // наачальное значение оставим пустым, т.к. получим его асинхронно. Реализуем это с помощью хука useEffect().
     // Данный хук единожды вызывается при рендере всей страницы (параметр []). С его помощью мы запрашиваем данные с
@@ -33,7 +34,7 @@ export const Users = ({ users, ...rest }) => {
     // при изменении фильтра принудительно сбросим номер страницы до 1:
     useEffect(() => {
         setCurrentPage(1);
-        console.log(selectedProperty);
+        // console.log(selectedProperty);
     }, [selectedProperty]);
 
     // Функция-обработчик события выбора номера страницы в <Pagination/>
@@ -130,5 +131,4 @@ export const Users = ({ users, ...rest }) => {
 
 Users.propTypes = {
     users: PropTypes.arrayOf(PropTypes.object)
-    // selectedProperty: PropTypes.string
 };
