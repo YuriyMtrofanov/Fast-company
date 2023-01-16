@@ -6,6 +6,7 @@ export const professionsObject = {
     actor: { _id: "67rdca3eeb7f6fgeed471824", name: "Актер" },
     cook: { _id: "67rdca3eeb7f6fgeed471829", name: "Повар" }
 };
+
 export const professions = [
     { _id: "67rdca3eeb7f6fgeed471818", name: "Доктор" },
     { _id: "67rdca3eeb7f6fgeed471820", name: "Официант" },
@@ -18,8 +19,8 @@ export const professions = [
 function fetchAll() {
     return new Promise((resolve) => {
         setTimeout(() => {
-            resolve(professionsObject);
-            // resolve(professions);
+            // resolve(professionsObject);
+            resolve(professions);
         }, 2000);
     });
 };
