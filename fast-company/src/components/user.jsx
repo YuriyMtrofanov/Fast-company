@@ -1,7 +1,6 @@
 import React from "react";
 import { Qualitie } from "./qualitie";
 import { BookMark } from "./bookmark";
-import "bootstrap/dist/css/bootstrap.css";
 import PropTypes from "prop-types";
 
 export const User = ({

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.css";
 import { Users } from "./components/users.jsx";
 import api from "./api";
 
