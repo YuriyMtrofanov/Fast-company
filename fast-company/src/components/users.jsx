@@ -37,18 +37,7 @@ export const Users = ({ users, ...rest }) => {
     };
 
     const handleSort = (item) => {
-        // При клике по шапке таблицы с помощью onClick мы получаем параметр сортировки, который передаем в состояние
-        // Чтобы при повторном клике на параметр сортировки у нас менялся порядок сортировки на противоположный требуется проверить условие
-        // при котором параметр "iter" нашего заданного состояния "sortBy" (при предыдущем клике) был равен параметру "item", по которому произошел клик
-        // Если условие выполняется, то мы проверяем какой порядок задан в нашем состоянии на предыдущем шаге "prevState.order" и меняем его на противоположный
-        // т.е. если он равен "asc", то меняем на "desc", а в противном случае просто меняем его на "asc".
-        if (sortBy.iter === item) {
-            setSortBy((prevState) => ({ iter: prevState.iter, order: prevState.order === "asc" ? "desc" : "asc" }));
-        // Для того, чтобы при выборе следующего параметра сортировки, сортировка возвращалась к значению "asc" следует
-        // в else прередать значение по умолчанию для параметра "order" т.е. "asc"
-        } else {
-            setSortBy({ iter: item, order: "asc" });
-        }
+        setSortBy(item);
     };
 
     const filteredUsers = selectedProperty
@@ -97,6 +86,7 @@ export const Users = ({ users, ...rest }) => {
                     <UsersTable
                         users = { usersCropp }
                         onSort = { handleSort }
+                        selectedSort = { sortBy }
                         {...rest}
                     />
                 )}
