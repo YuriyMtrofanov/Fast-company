@@ -12,6 +12,7 @@ export function App() {
     }, []);
 
     const handleBoookMark = (userId) => {
+        // console.log(userId);
         const usersListBM = usersList.map((user) => {
             if (user._id === userId) {
                 user.bookmark = !user.bookmark;

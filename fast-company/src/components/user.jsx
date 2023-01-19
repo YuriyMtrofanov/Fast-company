@@ -27,12 +27,11 @@ export const User = ({
             <td> {completedMeetings} </td>
             <td> {rate} /5</td>
             <td>
-                <span
-                    className="btn btn-light btn-sm"
+                <BookMark
+                    // { ...{ _id, bookmark, onBookMark }}
+                    status = { bookmark }
                     onClick={() => onBookMark(_id)}
-                >
-                    {<BookMark bookmark={bookmark} />}
-                </span>
+                />
             </td>
             <td>
                 <button

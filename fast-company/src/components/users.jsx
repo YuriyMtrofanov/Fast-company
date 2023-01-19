@@ -43,12 +43,10 @@ export const Users = ({ users, ...rest }) => {
         // Если условие выполняется, то мы проверяем какой порядок задан в нашем состоянии на предыдущем шаге "prevState.order" и меняем его на противоположный
         // т.е. если он равен "asc", то меняем на "desc", а в противном случае просто меняем его на "asc".
         if (sortBy.iter === item) {
-            console.log("Сортировка по ", sortBy.iter, "Порядок ", sortBy.order);
             setSortBy((prevState) => ({ iter: prevState.iter, order: prevState.order === "asc" ? "desc" : "asc" }));
         // Для того, чтобы при выборе следующего параметра сортировки, сортировка возвращалась к значению "asc" следует
         // в else прередать значение по умолчанию для параметра "order" т.е. "asc"
         } else {
-            console.log("Сортировка по ", sortBy.iter, "Порядок ", sortBy.order);
             setSortBy({ iter: item, order: "asc" });
         }
     };
