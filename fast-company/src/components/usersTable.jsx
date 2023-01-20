@@ -5,6 +5,7 @@ import { TableHeader } from "./tableHeader";
 import { TableBody } from "./tableBody";
 import { BookMark } from "./bookmark";
 import { QualitiesList } from "./qualitiesList";
+import { Table } from "./table";
 
 export const UsersTable = ({
     users,
@@ -62,10 +63,20 @@ export const UsersTable = ({
         }
     };
     return (
-        <table className="table table-striped">
+    // Первый вариант доступа к талблице:
+    // <Table
+    //     data = { users }
+    //     columns = { columns }
+    //     selectedSort = { selectedSort }
+    //     onSort = { onSort }
+    // />
+
+        // Второй более универсальный вариант доступа к таблице с проверкой на
+        // наличие дочерних компонентов:
+        <Table>
             <TableHeader { ...{ onSort, selectedSort, columns }}/>
             <TableBody { ...{ data: users, columns } }/>
-        </table>
+        </Table>
     );
 };
 
