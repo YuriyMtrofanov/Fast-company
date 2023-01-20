@@ -21,7 +21,7 @@ function fetchAll() {
         setTimeout(() => {
             // resolve(professionsObject);
             resolve(professions);
-        }, 2000);
+        }, 1000);
     });
 };
 

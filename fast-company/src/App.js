@@ -16,7 +16,7 @@ export function App() {
         // console.log(userId);
         const usersListBM = usersList.map((user) => {
             if (user._id === userId) {
-                user.bookmark = !user.bookmark;
+                return { ...user, bookmark: !user.bookmark };
             }
             return user;
         });

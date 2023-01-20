@@ -149,7 +149,7 @@ const fetchAll = () => {
     return new Promise((resolve) => {
         window.setTimeout(function () {
             resolve(users);
-        }, 2000);
+        }, 1000);
     });
 };
 
