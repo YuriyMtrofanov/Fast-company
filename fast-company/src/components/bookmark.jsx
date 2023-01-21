@@ -12,18 +12,3 @@ export const BookMark = ({ status, ...rest }) => {
 BookMark.propTypes = {
     status: PropTypes.bool
 };
-
-// Моё старое решение:
-// export const BookMark = ({ bookmark }) => {
-// const addBookMark = () => {
-// return status === true
-//     ? (<i
-//         className="bi bi-person-check-fill"
-//         // onClick={() => onBookMark(_id)}
-//     ></i>)
-//     : (<i
-//         className="bi bi-person"
-//         // onClick={() => onBookMark(_id)}
-//     ></i>);
-// };
-// return <h3>{addBookMark()}</h3>;
