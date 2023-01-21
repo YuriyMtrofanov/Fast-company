@@ -57,8 +57,8 @@ export const Users = () => {
         setCurrentPage(pageIndex);
     };
 
-    const handleItemSelect = (params) => { // Реализуем функцию-обработчик для выбора нужного для фильтрации параметра
-        setSelectedProperty(params); // так как при клике на компонент мы получаем объект с данными
+    const handleItemSelect = (params) => {
+        setSelectedProperty(params);
     };
 
     const handleSort = (item) => {
