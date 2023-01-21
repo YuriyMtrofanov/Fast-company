@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { UpDownIcon } from "./upDownIcon";
 
 export const TableHeader = ({ onSort, selectedSort, columns }) => {
     const handleSort = (item) => {
@@ -20,6 +21,10 @@ export const TableHeader = ({ onSort, selectedSort, columns }) => {
         } else {
             onSort({ iter: item, order: "asc" });
         }
+    };
+
+    const renderUpDownIcon = (item) => {
+        if (selectedSort.iter === item) { return (<UpDownIcon { ...selectedSort }/>); };
     };
 
     // Для реализации динамического рендеринга шапки таблицы нам потребуются входящие данные с информацией о столбцах "columns",
@@ -44,6 +49,9 @@ export const TableHeader = ({ onSort, selectedSort, columns }) => {
                         scope="col"
                     >
                         { columns[column].name }
+                        { columns[column].iter &&
+                            renderUpDownIcon(columns[column].iter)
+                        }
                     </th>
                 ))}
             </tr>

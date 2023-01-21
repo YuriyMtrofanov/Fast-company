@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-// import { User } from "./user";
 import { TableHeader } from "./tableHeader";
 import { TableBody } from "./tableBody";
 import { BookMark } from "./bookmark";
@@ -12,8 +11,7 @@ export const UsersTable = ({
     onSort,
     selectedSort,
     onBookMark,
-    onDelete,
-    ...rest
+    onDelete
 }) => {
     // Объект, являющийся шаблоном назметки таблици. "iter" - это ключ объекта с
     // исходными данными "user", а "name" - это название столбца с данными

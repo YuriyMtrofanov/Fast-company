@@ -62,6 +62,8 @@ export const Users = () => {
     };
 
     const handleSort = (item) => {
+        console.log("item", item);
+        // console.log("sortBy", sortBy);
         setSortBy(item);
     };
 
