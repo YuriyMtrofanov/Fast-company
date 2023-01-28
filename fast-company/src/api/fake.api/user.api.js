@@ -153,6 +153,15 @@ const fetchAll = () => {
     });
 };
 
+const getById = (id) => {
+    return new Promise((resolve) => {
+        window.setTimeout(function () {
+            resolve(users.find((user) => user._id === id));
+        }, 1000);
+    });
+};
+
 export {
-    fetchAll
+    fetchAll,
+    getById
 };
