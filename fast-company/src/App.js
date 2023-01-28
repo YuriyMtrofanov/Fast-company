@@ -14,7 +14,6 @@ export function App() {
                 <Route path = "/" exact component={Main}/>
                 <Route path = "/login" component={Login}/>
                 <Route path = "/users" component={Users}/>
-                {/* <Users /> */}
             </Switch>
         </div>
     );
