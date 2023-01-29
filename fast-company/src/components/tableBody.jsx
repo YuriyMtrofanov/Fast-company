@@ -13,7 +13,6 @@ export const TableBody = ({ data, columns }) => {
         } else {
             if (columns[column].iter === "name") {
                 const result = _.get(item, columns[column].iter);
-                // console.log(result, `link: /users/${item._id}`);
                 return (
                     <>
                         <Link key = {item._id} to = {`users/${item._id}`}>
@@ -21,9 +20,7 @@ export const TableBody = ({ data, columns }) => {
                         </Link>
                     </>
                 );
-                // return result;
             } else {
-                // Если же поля "component" не существует, то выводим статические данные из объекта "user".
                 return _.get(item, columns[column].iter);
             }
         }
