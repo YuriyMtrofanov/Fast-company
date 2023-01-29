@@ -7,12 +7,6 @@ export const UpDownIcon = (selectedSort) => {
             className={"bi bi-caret" + (selectedSort.order === "asc" ? "-up-fill" : "-down-fill")}
         ></i>
     );
-    // Аналогичная, но развернутая запись:
-    // if (columns.iter) {
-    // return (selectedSort.order === "asc"
-    //     ? <i className="bi bi-caret-up-fill"></i>
-    //     : <i className="bi bi-caret-down-fill"></i>);
-    // };
 };
 
 UpDownIcon.propTypes = {

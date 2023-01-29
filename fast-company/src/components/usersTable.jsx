@@ -13,17 +13,12 @@ export const UsersTable = ({
     onBookMark,
     onDelete
 }) => {
-    // Объект, являющийся шаблоном назметки таблици. "iter" - это ключ объекта с
-    // исходными данными "user", а "name" - это название столбца с данными
     const columns = {
         name: { iter: "name", name: "Имя" },
         qualities: {
             name: "Качества",
-            // component: "qualities"
             component: (user) => (
                 <QualitiesList {...{ qualities: user.qualities }} />
-                // Либо более упрощенная запись:
-                // <QualitiesList qualities = { user.qualities }/>
             )
         },
         profession: { iter: "profession.name", name: "Профессия" },
@@ -32,13 +27,6 @@ export const UsersTable = ({
         bookmark: {
             iter: "bookmark",
             name: "Избранное",
-            // Т.к. для реализации закладок требуется доступ к "user", который
-            // мы получаем на более низком уровне путем перебора "users", то вызов
-            // компонента на уровень выше мы реализуем через функцию, аргументом котоорой
-            // будет "user", получаемый ниже уровнем и передаваемый в "component(item)"
-            // (в теле функции "renderContent()") объекта columns.
-            // ВАЖНО! Здесь мы не выполняем функцию, а возвращаем компонент, поэтому
-            // используем не {}, а ()
             component: (user) => (
                 <BookMark
                     status = { user.bookmark }
@@ -48,7 +36,6 @@ export const UsersTable = ({
             )
         },
         delete: {
-            // По аналогии через функцию реализум кнопку "Delete"
             component: (user) => (
                 <button
                     type="button"
@@ -61,16 +48,6 @@ export const UsersTable = ({
         }
     };
     return (
-    // Первый вариант доступа к талблице:
-    // <Table
-    //     data = { users }
-    //     columns = { columns }
-    //     selectedSort = { selectedSort }
-    //     onSort = { onSort }
-    // />
-
-        // Второй более универсальный вариант доступа к таблице с проверкой на
-        // наличие дочерних компонентов:
         <Table>
             <TableHeader { ...{ onSort, selectedSort, columns }}/>
             <TableBody { ...{ data: users, columns } }/>

@@ -52,5 +52,5 @@ GroupList.propTypes = {
     valueProperty: PropTypes.string.isRequired,
     contentProperty: PropTypes.string.isRequired,
     onItemSelect: PropTypes.func,
-    selectedItem: PropTypes.string // исправил на строку т.к. ранее мы сравнивали объекты, а сейчас id этих объектов
+    selectedItem: PropTypes.string
 };
