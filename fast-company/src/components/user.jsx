@@ -2,13 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import api from "../api";
 import { Qualitie } from "./qualitie";
-
-// 1. Привязать ссылку к имени пользователя на общей странице. Компонент Link добавит обработчик
-// событий, который позволит получать id пользователя, формировать ссылку и переходить на персональную
-// пользователя.
-
-// 2 Реализовать переадресацию в случае ввода некорректной ссылки. Выполнить проверку на существование
-// запрашиваемого id.
+import Loading from "./loading";
 
 const User = () => {
     const { userId } = useParams();
@@ -41,7 +35,7 @@ const User = () => {
             </>
         );
     } else {
-        return ("Loading...");
+        return (<Loading />);
     };
 };
 
