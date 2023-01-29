@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import _ from "lodash";
 
 export const TableBody = ({ data, columns }) => {
@@ -10,7 +11,21 @@ export const TableBody = ({ data, columns }) => {
                 return component(item);
             } return component;
         } else {
-            return _.get(item, columns[column].iter);
+            if (columns[column].iter === "name") {
+                const result = _.get(item, columns[column].iter);
+                // console.log(result, `link: /users/${item._id}`);
+                return (
+                    <>
+                        <Link key = {item._id} to = {`users/${item._id}`}>
+                            {result}
+                        </Link>
+                    </>
+                );
+                // return result;
+            } else {
+                // Если же поля "component" не существует, то выводим статические данные из объекта "user".
+                return _.get(item, columns[column].iter);
+            }
         }
     };
 
