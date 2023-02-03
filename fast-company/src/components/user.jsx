@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import PropTypes from "prop-types";
 import api from "../api";
 import { Qualitie } from "./qualitie";
 import Loading from "./loading";
@@ -8,8 +9,6 @@ const User = () => {
     const { userId } = useParams();
     const history = useHistory();
     const [user, setUser] = useState();
-    console.log("user", user);
-    console.log("user id", typeof userId);
 
     useEffect(() => {
         api.users.getById(userId).then(data => {
@@ -37,6 +36,10 @@ const User = () => {
     } else {
         return (<Loading />);
     };
+};
+
+User.propTypes = {
+    userId: PropTypes.string.isReqired
 };
 
 export default User;
