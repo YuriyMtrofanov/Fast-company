@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "../components/textField";
+import { validator } from "../utils/validator";
 
 const Login = () => {
     const [inputData, setInputData] = useState({ email: "", password: "" }); // Задаем состояние для всей формы сразу (Информация, вводимая в полях ввода).
@@ -11,14 +12,56 @@ const Login = () => {
         ));
     };
 
+    const [errors, setErrors] = useState({});
+
+    // Файл конфигурации (настроек полей) для валидации форм
+    const validationConfig = {
+        email: {
+            isRequired: {
+                message: `Поле Email обязательно к заполнению`
+            },
+            isEmail: {
+                message: `Email введен некорректно`
+            }
+        },
+        password: {
+            isRequired: {
+                message: `Поле Password обязательно к заполнению`
+            }
+        }
+    };
+
+    const validate = () => {
+        const errors = validator(inputData, validationConfig);
+        // Нам больше не нужно валидировать вручную поэтому код ниже удаляем
+        // for (const fieldName in inputData) {
+        //     if (inputData[fieldName].trim() === "") {
+        //         errors[fieldName] = `Поле ${fieldName} дложно быль заполнено`;
+        //     }
+        // }
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    useEffect(() => {
+        validate();
+    }, [inputData]);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const isValid = validate();
+        if (!isValid) return;
+        console.log(inputData); // т.о. если валидация не увенчалась успехом, то console.log блокируется и информация не выводится в консоль
+    };
+
     return (
-        <form action="">
+        <form onSubmit = { handleSubmit }>
             {/* <div>
                 <label htmlFor="email">Email</label>{" "}
                 <input
-                    type="text"
-                    id="email"
-                    name="email"
+                    type="text"     // или "password"
+                    id="email"      // или "password"
+                    name="email"    // или "password"
                     value={inputData.email} // inputData - объект с ключами email и password (event.target.name). По данным ключам хранятся данные "event.target.value"
                     onChange={handleChange}
                 />
@@ -29,24 +72,17 @@ const Login = () => {
                 name = "email"
                 value = {inputData.email}
                 onChange = {handleChange}
+                error = {errors.email}
             />
-            {/* <div>
-                <label htmlFor="password">Password</label>{" "}
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={inputData.password} // inputData - объект с ключами email и password (event.target.name). По данным ключам хранятся данные "event.target.value"
-                    onChange={handleChange}
-                />
-            </div> */}
             <TextField
                 title = "Password"
                 type = "password"
                 name = "password"
                 value = {inputData.password}
                 onChange = {handleChange}
+                error = {errors.password}
             />
+            <button type="submit">Submit</button>
         </form>
     );
 };

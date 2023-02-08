@@ -6,11 +6,12 @@ const TextField = ({
     type,
     name,
     value,
-    onChange
+    onChange,
+    error
 }) => {
     return (
         <div>
-            <label htmlFor="email">{ title }</label>{" "}
+            <label htmlFor={name}>{ title }</label>{" "}
             <input
                 type = {type}
                 id = {name}
@@ -18,6 +19,8 @@ const TextField = ({
                 value = {value} // Ключ к обоъекту с вводимыми данными "inputData.email" ("event.target.name):  "event.target.value"
                 onChange = {onChange}
             />
+            {error &&
+                <p>{error}</p>}
         </div>
     );
 };
@@ -27,7 +30,8 @@ TextField.propTypes = {
     type: PropTypes.string,
     name: PropTypes.string,
     value: PropTypes.string,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    error: PropTypes.string
 };
 
 export default TextField;
