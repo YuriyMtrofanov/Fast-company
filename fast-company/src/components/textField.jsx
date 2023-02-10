@@ -7,7 +7,8 @@ const TextField = ({
     name,
     value,
     onChange,
-    error
+    error,
+    placeholder
 }) => {
     const [showPassword, setShowPassword] = useState();
 
@@ -22,7 +23,7 @@ const TextField = ({
     return (
         <div className="mb-4">
             <label htmlFor={name}>{ title }</label>
-            <div className="input-group">
+            <div className="input-group has-validation">
                 <input
                     type = {showPassword ? "text" : type} // Если showPassword = true, то type="text" если false, то type = параметру, передаваемому с props
                     id = {name}
@@ -31,6 +32,7 @@ const TextField = ({
                     onChange = {onChange}
                     className = {getInputClasses()}
                     // className = "form-control is-invalid"
+                    placeholder = {placeholder === "Search" ? "Search" : ""}
                 />
                 {type === "password" && ( // кнопка отобразается только если передаваемый с props атрибут type равен "password"
                     <button
@@ -41,9 +43,9 @@ const TextField = ({
                         <i className = {"bi bi-eye" + (showPassword ? "-slash" : "")}></i>
                     </button>
                 )}
+                {error &&
+                    <div className="invalid-feedback">{error}</div>}
             </div>
-            {error &&
-                <div className="invalid-feedback">{error}</div>}
         </div>
     );
 };
@@ -54,7 +56,8 @@ TextField.propTypes = {
     name: PropTypes.string,
     value: PropTypes.string,
     onChange: PropTypes.func,
-    error: PropTypes.string
+    error: PropTypes.string,
+    placeholder: PropTypes.string
 };
 
 export default TextField;

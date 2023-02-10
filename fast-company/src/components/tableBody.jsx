@@ -43,5 +43,6 @@ export const TableBody = ({ data, columns }) => {
 
 TableBody.propTypes = {
     data: PropTypes.array.isRequired,
-    columns: PropTypes.object.isRequired
+    columns: PropTypes.object.isRequired,
+    inputData: PropTypes.string
 };

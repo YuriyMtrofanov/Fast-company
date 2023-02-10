@@ -7,6 +7,7 @@ import { SearchStatus } from "./searchStatus.jsx";
 import { paginate } from "../utils/paginate";
 import Pagination from "./pagination";
 import PropTypes from "prop-types";
+import TextField from "./textField";
 
 export const UsersList = () => {
     const [users, setUsers] = useState();
@@ -61,11 +62,32 @@ export const UsersList = () => {
         setSortBy(item);
     };
 
+    const [inputData, setInputData] = useState("");
+
+    // обработчик, записыывающий данные из поля ввода в переменную "inputData"
+    const handleInputChange = (event) => {
+        setInputData(() => event.target.value);
+    };
+
+    // обработчик отправки данных на сервер. Пока не задействован.
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        // console.log(event.target);
+    };
+
     if (users) {
+        // На этом этапе требуется понять каким образом реализовать взаимоисключающий поиск
+        const filteredUsers = selectedProperty
+            ? users.filter(user => user.profession._id === selectedProperty)
+            : users.filter(user => user.name.toLowerCase().includes(inputData));
+        /*
+        const foundUsers = users.filter(user => user.name.includes(inputData));
+        console.log(foundUsers);
+        // Надо разобраться какую переменную раньше вводить
         const filteredUsers = selectedProperty
             ? users.filter(user => user.profession._id === selectedProperty)
             : users;
-
+        */
         const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
 
         const count = filteredUsers.length;
@@ -97,6 +119,15 @@ export const UsersList = () => {
                     <h1>
                         <SearchStatus length = { count } />
                     </h1>
+                    <form onSubmit = { handleSubmit }>
+                        <TextField
+                            type = "text"
+                            name = "search"
+                            placeholder = "Search"
+                            value = {inputData}
+                            onChange = {handleInputChange}
+                        />
+                    </form>
                     {count > 0 && (
                         <UsersTable
                             users = { usersCropp }
@@ -104,6 +135,7 @@ export const UsersList = () => {
                             selectedSort = { sortBy }
                             onBookMark = { handleBoookMark }
                             onDelete = { handleDelete }
+                            input = { inputData }
                         />
                     )}
                     <div className="d-flex justify-content-center">
