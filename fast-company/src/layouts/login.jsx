@@ -27,6 +27,16 @@ const Login = () => {
         password: {
             isRequired: {
                 message: `Поле Password обязательно к заполнению`
+            },
+            isCapitalSymbol: {
+                message: `Password должен содержать заглавные буквы`
+            },
+            isConteinDigit: {
+                message: `Password должен содержать цифры`
+            },
+            min: {
+                message: `Password должен содержать минимум из восьми символов`,
+                value: 8
             }
         }
     };
@@ -54,36 +64,53 @@ const Login = () => {
         console.log(inputData); // т.о. если валидация не увенчалась успехом, то console.log блокируется и информация не выводится в консоль
     };
 
+    // Переменная для управления кнопкой "Submit". Она принимается в себя условие проверки наличия ошибок в
+    // объекте с ошибками "errors = {}". Если нет записей, значит нет и ключей к записям, значит длина массива
+    // в ключами = 0.
+    const isAbled = Object.keys(errors).length === 0;
+    // console.log(isAbled);
+
     return (
-        <form onSubmit = { handleSubmit }>
-            {/* <div>
-                <label htmlFor="email">Email</label>{" "}
-                <input
-                    type="text"     // или "password"
-                    id="email"      // или "password"
-                    name="email"    // или "password"
-                    value={inputData.email} // inputData - объект с ключами email и password (event.target.name). По данным ключам хранятся данные "event.target.value"
-                    onChange={handleChange}
-                />
-            </div> */}
-            <TextField
-                title = "Email"
-                type = "text"
-                name = "email"
-                value = {inputData.email}
-                onChange = {handleChange}
-                error = {errors.email}
-            />
-            <TextField
-                title = "Password"
-                type = "password"
-                name = "password"
-                value = {inputData.password}
-                onChange = {handleChange}
-                error = {errors.password}
-            />
-            <button type="submit">Submit</button>
-        </form>
+        <div className="container">
+            <div className="row">
+                <div className="col-md-6 offset-md-3 shadow p-4">
+                    <h3 className="mb-4">Login</h3>
+                    <form onSubmit = { handleSubmit }>
+                        {/* <div>
+                            <label htmlFor="email">Email</label>{" "}
+                            <input
+                                type="text"     // или "password"
+                                id="email"      // или "password"
+                                name="email"    // или "password"
+                                value={inputData.email} // inputData - объект с ключами email и password (event.target.name). По данным ключам хранятся данные "event.target.value"
+                                onChange={handleChange}
+                            />
+                        </div> */}
+                        <TextField
+                            title = "Email"
+                            type = "text"
+                            name = "email"
+                            value = {inputData.email}
+                            onChange = {handleChange}
+                            error = {errors.email}
+                        />
+                        <TextField
+                            title = "Password"
+                            type = "password"
+                            name = "password"
+                            value = {inputData.password}
+                            onChange = {handleChange}
+                            error = {errors.password}
+                        />
+                        <button
+                            type="submit"
+                            disabled = {!isAbled} // Кнопка активна при отсутствии ошибок т.е. если isDisabled не существует
+                            className = "btn btn-primary w-100 mx-auto"
+                        >Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     );
 };
 

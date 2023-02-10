@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 const TextField = ({
@@ -9,18 +9,41 @@ const TextField = ({
     onChange,
     error
 }) => {
+    const [showPassword, setShowPassword] = useState();
+
+    const changeShowPassword = () => {
+        setShowPassword(prevState => !prevState);
+    };
+
+    const getInputClasses = () => {
+        return "form-control" + (error ? " is-invalid" : "");
+    };
+
     return (
-        <div>
-            <label htmlFor={name}>{ title }</label>{" "}
-            <input
-                type = {type}
-                id = {name}
-                name = {name}
-                value = {value} // Ключ к обоъекту с вводимыми данными "inputData.email" ("event.target.name):  "event.target.value"
-                onChange = {onChange}
-            />
+        <div className="mb-4">
+            <label htmlFor={name}>{ title }</label>
+            <div className="input-group">
+                <input
+                    type = {showPassword ? "text" : type} // Если showPassword = true, то type="text" если false, то type = параметру, передаваемому с props
+                    id = {name}
+                    name = {name}
+                    value = {value} // Ключ к обоъекту с вводимыми данными "inputData.email" ("event.target.name):  "event.target.value"
+                    onChange = {onChange}
+                    className = {getInputClasses()}
+                    // className = "form-control is-invalid"
+                />
+                {type === "password" && ( // кнопка отобразается только если передаваемый с props атрибут type равен "password"
+                    <button
+                        className ="btn btn-outline-secondary"
+                        type = "button"
+                        onClick = {changeShowPassword}
+                    >
+                        <i className = {"bi bi-eye" + (showPassword ? "-slash" : "")}></i>
+                    </button>
+                )}
+            </div>
             {error &&
-                <p>{error}</p>}
+                <div className="invalid-feedback">{error}</div>}
         </div>
     );
 };
