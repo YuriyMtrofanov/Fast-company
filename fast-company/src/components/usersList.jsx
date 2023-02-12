@@ -11,6 +11,11 @@ import TextField from "./textField";
 
 export const UsersList = () => {
     const [users, setUsers] = useState();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [professions, setProfessions] = useState();
+    const [selectedProperty, setSelectedProperty] = useState();
+    const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
+    const [inputData, setInputData] = useState("");
 
     useEffect(() => {
         api.users.fetchAll().then(data => {
@@ -35,11 +40,6 @@ export const UsersList = () => {
         setUsers(currentUsers);
     };
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [professions, setProfessions] = useState();
-    const [selectedProperty, setSelectedProperty] = useState();
-    const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
-
     useEffect(() => {
         api.professions.fetchAll().then(data =>
             setProfessions(data)
@@ -54,49 +54,51 @@ export const UsersList = () => {
         setCurrentPage(pageIndex);
     };
 
-    const handleItemSelect = (params) => {
-        setSelectedProperty(params);
-    };
-
     const handleSort = (item) => {
         setSortBy(item);
     };
 
-    const [inputData, setInputData] = useState("");
+    // Функция-обработчик событий на кнопке очистки списка профессий
+    const handleClearList = () => {
+        setSelectedProperty();
+    };
 
-    // обработчик, записыывающий данные из поля ввода в переменную "inputData"
+    // При выборе профессии выполняется проверка на содержании символов в поле поиска, есои данные введены, то
+    // задаем для него пустую строку в качестве состояния (т.е. очищаем поле ввода)
+    const handleItemSelect = (params) => {
+        setSelectedProperty(params);
+        if (inputData) {
+            setInputData("");
+        }
+    };
+
+    // обработчик, записывающий данные из поля ввода в переменную "inputData".
+    // При вводе текста в поле ввода первым делом очищаем фильтр по проыессии с помощью setSelectedProperty()
     const handleInputChange = (event) => {
-        setInputData(() => event.target.value);
+        handleClearList();
+        setInputData(event.target.value);
     };
 
     // обработчик отправки данных на сервер. Пока не задействован.
     const handleSubmit = (event) => {
         event.preventDefault();
-        // console.log(event.target);
+        console.log(event.target);
     };
 
     if (users) {
-        // На этом этапе требуется понять каким образом реализовать взаимоисключающий поиск
-        const filteredUsers = selectedProperty
-            ? users.filter(user => user.profession._id === selectedProperty)
-            : users.filter(user => user.name.toLowerCase().includes(inputData));
-        /*
-        const foundUsers = users.filter(user => user.name.includes(inputData));
-        console.log(foundUsers);
-        // Надо разобраться какую переменную раньше вводить
-        const filteredUsers = selectedProperty
-            ? users.filter(user => user.profession._id === selectedProperty)
-            : users;
-        */
-        const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
+        let filteredUsers = users;
+        // Если в поле ввода введены данные, то реализую поиск по сочетанию символов в именах
+        if (inputData) {
+            filteredUsers = users.filter(user => user.name.toLowerCase().includes(inputData));
+        // Если выбрана профессия, то реализую поиск по профессиям
+        } else if (selectedProperty) {
+            filteredUsers = users.filter(user => user.profession._id === selectedProperty);
+        };
 
+        const sortedUsers = _.orderBy(filteredUsers, [sortBy.iter], [sortBy.order]);
         const count = filteredUsers.length;
         const pageSize = 8;
         const usersCropp = paginate(sortedUsers, currentPage, pageSize);
-
-        const handleClearList = () => {
-            setSelectedProperty();
-        };
 
         return (
             <div className="d-flex">
