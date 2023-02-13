@@ -2,12 +2,20 @@ import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
 import SelectField from "../common/form/selectField";
+import RadioField from "../common/form/radioField";
 import api from "../../api";
 
 const RegisterForm = () => {
     // Задаем состояние для всей формы сразу (Информация, вводимая в полях ввода). Для каждого поля добавляем
     // свой собственный параметр
-    const [inputData, setInputData] = useState({ email: "", password: "", profession: "" });
+    const [inputData, setInputData] = useState(
+        {
+            email: "", // Значение по умолчанию для "email"
+            password: "", // Значение по умолчанию для "password"
+            profession: "", // Значение по умолчанию для "profession"
+            sex: "male" // Значение по умолчанию для "sex"
+        }
+    );
     const [errors, setErrors] = useState({});
 
     const handleChange = (event) => { // Создаем обработчик, фиксирующий изменения вводимой информации
@@ -121,6 +129,16 @@ const RegisterForm = () => {
                 defaultOption = "Выберите..."
                 options = {professions} // Через этот параметр получаем профессии
                 error = {errors.profession}// метод для ренедринга ошибки
+            />
+            <RadioField
+                options = {[
+                    { name: "Male", value: "male" },
+                    { name: "Female", value: "female" },
+                    { name: "Other", value: "other" }
+                ]}
+                name = "sex"
+                onChange = {handleChange}
+                value = {inputData.sex}
             />
             <button
                 type="submit"
