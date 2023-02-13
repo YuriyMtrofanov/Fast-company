@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
+import SelectField from "../common/form/selectField";
+import api from "../../api";
 
 const RegisterForm = () => {
-    const [inputData, setInputData] = useState({ email: "", password: "" }); // Задаем состояние для всей формы сразу (Информация, вводимая в полях ввода).
+    // Задаем состояние для всей формы сразу (Информация, вводимая в полях ввода). Для каждого поля добавляем
+    // свой собственный параметр
+    const [inputData, setInputData] = useState({ email: "", password: "", profession: "" });
+    const [errors, setErrors] = useState({});
 
     const handleChange = (event) => { // Создаем обработчик, фиксирующий изменения вводимой информации
         // console.log("name: ", event.target.name, "value: ", event.target.value);
@@ -12,7 +17,13 @@ const RegisterForm = () => {
         ));
     };
 
-    const [errors, setErrors] = useState({});
+    // Для реализации выпадающего  списка профессий трелбуется для начала получить эти профессии
+    const [professions, setProfessions] = useState();
+    useEffect(() => {
+        api.professions.fetchAll().then(data =>
+            setProfessions(data)
+        );
+    }, []);
 
     // Файл конфигурации (настроек полей) для валидации форм
     const validationConfig = {
@@ -37,6 +48,11 @@ const RegisterForm = () => {
             min: {
                 message: `Password должен содержать минимум из восьми символов`,
                 value: 8
+            }
+        },
+        profession: {
+            isRequired: {
+                message: `Выберите вашу профессию *Обязательно для заполнения)`
             }
         }
     };
@@ -97,6 +113,14 @@ const RegisterForm = () => {
                 value = {inputData.password}
                 onChange = {handleChange}
                 error = {errors.password}
+            />
+            <SelectField
+                title = "Веберите вашу профессию" // Название поля
+                value = {inputData.profession} // inputData.profession
+                onChange = {handleChange} // handleChange
+                defaultOption = "Выберите..."
+                options = {professions} // Через этот параметр получаем профессии
+                error = {errors.profession}// метод для ренедринга ошибки
             />
             <button
                 type="submit"
