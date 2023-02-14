@@ -3,36 +3,51 @@ import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
+import MultiSelectField from "../common/form/multiSelectField";
 import api from "../../api";
+// import CheckBoxField from "../common/form/checkBoxField";
 
 const RegisterForm = () => {
-    // Задаем состояние для всей формы сразу (Информация, вводимая в полях ввода). Для каждого поля добавляем
-    // свой собственный параметр
+    // Задаем состояние для всей страницы т.е. объект, в котором будут храниться все формы сразу
+    // (Информация, вводимая в полях ввода). Для каждого поля добавляем свой собственный параметр
     const [inputData, setInputData] = useState(
         {
             email: "", // Значение по умолчанию для "email"
             password: "", // Значение по умолчанию для "password"
             profession: "", // Значение по умолчанию для "profession"
-            sex: "male" // Значение по умолчанию для "sex"
+            sex: "male", // Значение по умолчанию для "sex"
+            qualities: [] // Значение для поля качеств
         }
     );
-    const [errors, setErrors] = useState({});
-
-    const handleChange = (event) => { // Создаем обработчик, фиксирующий изменения вводимой информации
-        // console.log("name: ", event.target.name, "value: ", event.target.value);
-        setInputData(prevState => (
-            { ...prevState, [event.target.name]: event.target.value }
-        ));
+    // Создаем обработчик, фиксирующий изменения вводимой информации в поле ввода. Мы можем его использовать для
+    // различных форм т.к. функционал идентичен вне зависимости от типа формы. Данная функция вызывается каждый раз
+    // когда в поле ввода ноявляется информация, и затем обновляется состояние переменной "inputData"
+    const handleChange = (target) => {
+        // console.log("target: ", target); // здесь мы получим undefined
+        // if (target) {
+        setInputData((prevState) => ({
+            // Как видно в данной форме ключ объе   кта задается динамически, в зависимости от выбранного поля
+            // event позволяет отследить событие в выбранном поле и получить данные этого поля через "target"
+            ...prevState,
+            [target.name]: target.value
+        }));
+        // }
     };
 
-    // Для реализации выпадающего  списка профессий трелбуется для начала получить эти профессии
+    // Для реализации выпадающего  списка профессий трелбуется для начала получить "professions" или "qualities"
     const [professions, setProfessions] = useState();
+    const [qualities, setQualities] = useState();
+
     useEffect(() => {
-        api.professions.fetchAll().then(data =>
+        api.professions.fetchAll().then(data => // асинхронный запрос профессий
             setProfessions(data)
+        );
+        api.qualities.fetchAll().then(data => // асинхронный запрос качеств
+            setQualities(data)
         );
     }, []);
 
+    const [errors, setErrors] = useState({});
     // Файл конфигурации (настроек полей) для валидации форм
     const validationConfig = {
         email: {
@@ -139,7 +154,15 @@ const RegisterForm = () => {
                 name = "sex"
                 onChange = {handleChange}
                 value = {inputData.sex}
+                title = "Выберите ваш пол"
             />
+            <MultiSelectField
+                name = "qualities"
+                options = {qualities}
+                onChange = {handleChange}
+                title = "Выберите ваши качества"
+            />
+            {/* <CheckBoxField /> */}
             <button
                 type="submit"
                 disabled = {!isAbled} // Кнопка активна при отсутствии ошибок т.е. если isDisabled не существует

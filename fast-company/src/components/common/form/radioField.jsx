@@ -8,6 +8,9 @@ const RadioField = ({
     value,
     title
 }) => {
+    const handleChange = ({ target }) => {
+        onChange({ name: target.name, value: target.value });
+    };
     return (
         <div className="mb-4">
             <label
@@ -15,30 +18,31 @@ const RadioField = ({
             >
                 {title}
             </label>
-            {options.map(option => (
-                <div
-                    key = {option.name + "" + option.value}
-                    className="form-check form-check-inline"
-                >
-                    <input
-                        className = "form-check-input"
-                        type = "radio"
-                        name = {name}
-                        id = {option.name + "" + option.value}
-                        checked = {option.value === value}
-                        // Параметр "checked" - "Выбран" применяется в том случае, когда выбранный пункт соответствует пункту из списка полученных данных
-                        value = {option.value}
-                        onChange = {onChange}
-                    />
-                    <label
-                        className = "form-check-label"
-                        htmlFor = {option.name + "" + option.value}
+            <div>
+                {options.map(option => (
+                    <div
+                        key = {option.name + "" + option.value}
+                        className="form-check form-check-inline"
                     >
-                        {option.name}
-                    </label>
-                </div>
-            ))}
-
+                        <input
+                            className = "form-check-input"
+                            type = "radio"
+                            name = {name}
+                            id = {option.name + "" + option.value}
+                            checked = {option.value === value}
+                            // Параметр "checked" - "Выбран" применяется в том случае, когда выбранный пункт соответствует пункту из списка полученных данных
+                            value = {option.value}
+                            onChange = {handleChange}
+                        />
+                        <label
+                            className = "form-check-label"
+                            htmlFor = {option.name + "" + option.value}
+                        >
+                            {option.name}
+                        </label>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

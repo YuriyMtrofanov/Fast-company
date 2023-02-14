@@ -12,6 +12,10 @@ const TextField = ({
 }) => {
     const [showPassword, setShowPassword] = useState();
 
+    const handleChange = ({ target }) => {
+        onChange({ name: target.name, value: target.value });
+    };
+
     const changeShowPassword = () => {
         setShowPassword(prevState => !prevState);
     };
@@ -29,7 +33,7 @@ const TextField = ({
                     id = {name}
                     name = {name}
                     value = {value} // Ключ к обоъекту с вводимыми данными "inputData.email" ("event.target.name):  "event.target.value"
-                    onChange = {onChange}
+                    onChange = {handleChange}
                     className = {getInputClasses()}
                     // className = "form-control is-invalid"
                     placeholder = {placeholder === "Search" ? "Search" : ""}

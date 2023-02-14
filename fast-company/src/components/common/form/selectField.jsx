@@ -3,13 +3,16 @@ import PropTypes from "prop-types";
 
 const SelectField = ({
     // Все пропсы и PropTypes идентичны тем, что мы задали в "TextField" кроме "defaultOption"
-    title, // Название поля
+    title, // Заголовок поля
     value, // inputData.profession
     onChange, // handleChange
     defaultOption, // значение отображаемое в поле ввода по умолчанию
     options, // Через этот параметр получаем профессии
     error // метод для ренедринга ошибки
 }) => {
+    const handleChange = ({ target }) => {
+        onChange({ name: target.name, value: target.value });
+    };
     // Метод для динамического рендеринга класса для тега <div>, отвечающего за отображения ошибки
     const getInputClasses = () => {
         return "form-select" + (error ? " is-invalid" : "");
@@ -46,7 +49,7 @@ const SelectField = ({
                 id = "validationCustom04"
                 name = "profession"
                 value = {value} // inputData.profession
-                onChange = {onChange} // handleChange
+                onChange = {handleChange} // handleChange
                 // required  - этот атрибут удаляем
             >
                 {/* На этом этапе какая-то ошибка Use the `defaultValue` or `value` props on <select> instead of setting `selected` on <option>. */}

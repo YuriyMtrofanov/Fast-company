@@ -5,10 +5,10 @@ import { validator } from "../../utils/validator";
 const LoginForm = () => {
     const [inputData, setInputData] = useState({ email: "", password: "" }); // Задаем состояние для всей формы сразу (Информация, вводимая в полях ввода).
 
-    const handleChange = (event) => { // Создаем обработчик, фиксирующий изменения вводимой информации
+    const handleChange = (target) => { // Создаем обработчик, фиксирующий изменения вводимой информации
         // console.log("name: ", event.target.name, "value: ", event.target.value);
         setInputData(prevState => (
-            { ...prevState, [event.target.name]: event.target.value }
+            { ...prevState, [target.name]: target.value }
         ));
     };
 
