@@ -5,7 +5,7 @@ import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import api from "../../api";
-// import CheckBoxField from "../common/form/checkBoxField";
+import CheckBoxField from "../common/form/checkBoxField";
 
 const RegisterForm = () => {
     // Задаем состояние для всей страницы т.е. объект, в котором будут храниться все формы сразу
@@ -16,7 +16,8 @@ const RegisterForm = () => {
             password: "", // Значение по умолчанию для "password"
             profession: "", // Значение по умолчанию для "profession"
             sex: "male", // Значение по умолчанию для "sex"
-            qualities: [] // Значение для поля качеств
+            qualities: [], // Значение для поля качеств
+            licence: false // Значение по умолчаниб для атрибута "value" для <CheckBoxField />
         }
     );
     // Создаем обработчик, фиксирующий изменения вводимой информации в поле ввода. Мы можем его использовать для
@@ -76,6 +77,11 @@ const RegisterForm = () => {
         profession: {
             isRequired: {
                 message: `Выберите вашу профессию *Обязательно для заполнения)`
+            }
+        },
+        licence: {
+            isRequired: {
+                message: `Для продолжения регистрации требуется подтверждение лицнзионного соглашения`
             }
         }
     };
@@ -139,6 +145,7 @@ const RegisterForm = () => {
             />
             <SelectField
                 title = "Веберите вашу профессию" // Название поля
+                name = "professions"
                 value = {inputData.profession} // inputData.profession
                 onChange = {handleChange} // handleChange
                 defaultOption = "Выберите..."
@@ -157,12 +164,20 @@ const RegisterForm = () => {
                 title = "Выберите ваш пол"
             />
             <MultiSelectField
+                title = "Выберите ваши качества"
                 name = "qualities"
                 options = {qualities}
                 onChange = {handleChange}
-                title = "Выберите ваши качества"
+                defaultValue = {inputData.qualities}
             />
-            {/* <CheckBoxField /> */}
+            <CheckBoxField
+                name = "licence"
+                value = {inputData.licence}
+                onChange = {handleChange}
+                error = {errors.licence}
+            >
+                Подтвердить <a>лицензионное соглашение</a>
+            </CheckBoxField>
             <button
                 type="submit"
                 disabled = {!isAbled} // Кнопка активна при отсутствии ошибок т.е. если isDisabled не существует

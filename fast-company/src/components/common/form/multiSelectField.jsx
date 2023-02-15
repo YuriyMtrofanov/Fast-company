@@ -3,10 +3,11 @@ import Select from "react-select";
 import PropTypes from "prop-types";
 
 const MultiSelectField = ({
+    title, // Заголовок поля
+    name,
     options, // асинхронно полученные данные "qualities"
     onChange,
-    name,
-    title // Заголовок поля
+    defaultValue
 }) => {
     // Так как "qualities" могут быть как массивом, так и объектом, нам требуется произвести некоторые манипуляции с данными,
     // чтобы привести данные к одному типу const options = [{ value: "...", label: "..." }, {}, {},...] в данном случае = "optionsArray"
@@ -38,6 +39,7 @@ const MultiSelectField = ({
                 isMulti // Множественный селект
                 className="basic-multi-select"
                 classNamePrefix="select"
+                defaultValue = {defaultValue}
                 closeMenuOnSelect={false} // позволяет не закрывать выпадающий список после выбора одного из пунктов
                 options={optionsArray} // По инструкции к библиотеке "react-select" options - массив из объектов. const options = [{ value: "...", label: "..." }, {}, {},...]
                 // а получаем мы объект с объектами, поэтому его нужно трансформировать. Для этого используем новый компонент
@@ -52,7 +54,8 @@ MultiSelectField.propTypes = {
     options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     onChange: PropTypes.func,
     name: PropTypes.string,
-    title: PropTypes.string
+    title: PropTypes.string,
+    defaultValue: PropTypes.array
 };
 
 export default MultiSelectField;

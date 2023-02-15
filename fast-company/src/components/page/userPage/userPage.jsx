@@ -39,7 +39,7 @@ const UserPage = () => {
 };
 
 UserPage.propTypes = {
-    userId: PropTypes.string.isReqired
+    userId: PropTypes.string
 };
 
 export default UserPage;

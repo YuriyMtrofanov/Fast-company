@@ -74,15 +74,15 @@ const usersListPage = () => {
 
     // обработчик, записывающий данные из поля ввода в переменную "inputData".
     // При вводе текста в поле ввода первым делом очищаем фильтр по проыессии с помощью setSelectedProperty()
-    const handleInputChange = (event) => {
+    const handleInputChange = (target) => {
         handleClearList();
-        setInputData(event.target.value);
+        setInputData(target.value);
     };
 
     // обработчик отправки данных на сервер. Пока не задействован.
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        console.log(event.target);
+    const handleSubmit = (target) => {
+        // preventDefault();
+        // console.log(target);
     };
 
     if (users) {

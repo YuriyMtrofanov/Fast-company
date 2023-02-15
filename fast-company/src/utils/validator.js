@@ -2,33 +2,37 @@ export function validator(inputData, config) {
     const errors = {};
     function validate(
         validationMethod, // название метода валидации (ключ) для данного поля с именем "fieldName"
-        inputDataField, // данные введенные в поле ввода с именем "fieldName"
+        inputData, // данные введенные в поле ввода с именем "fieldName"
         config // метод валидации, получаемый из config
     ) {
         let statusValidate; // Запишем условие валидации в переменную
         switch (validationMethod) {
-        case "isRequired":
-            // if (inputDataField.trim() === "") return config.message;
-            statusValidate = inputDataField.trim() === ""; // запишем условие в переменную statusValidate
+        case "isRequired": {
+            if (typeof inputData === "boolean") { // для <CheckBoxField> проверяем данные по типу "boolean"
+                statusValidate = !inputData; // сообщение об ошибке выводится в случае выполнения данного тождества
+            } else {
+                statusValidate = inputData.trim() === ""; // То есть если вводимые данные = пустой строке, то выводится сообщение об ошибке
+            }
             break;
+        }
         case "isEmail": {
             const emailRegExp = /^\S+@\S+\.\S+$/g; // Регулярное выражение проверки Email
-            // if (!emailRegExp.test(inputDataField)) return config.message;
-            statusValidate = !emailRegExp.test(inputDataField);
+            // if (!emailRegExp.test(inputData)) return config.message;
+            statusValidate = !emailRegExp.test(inputData); // Если ре. выражение не выполняется, то выводится сообщение об ошибке
             break;
         }
         case "isCapitalSymbol": {
             const capitalRegExp = /[A-Z]+/g; // Проверка на наличие заглавных букв
-            statusValidate = !capitalRegExp.test(inputDataField);
+            statusValidate = !capitalRegExp.test(inputData);
             break;
         }
         case "isConteinDigit": {
             const digitRegExp = /\d+/g; // Проверка на наличие цифр
-            statusValidate = !digitRegExp.test(inputDataField);
+            statusValidate = !digitRegExp.test(inputData);
             break;
         }
         case "min": {
-            statusValidate = inputDataField.length < config.value; // количество символов вводимой строки д/б больше заданного мин. колл-ва символов
+            statusValidate = inputData.length < config.value; // количество символов вводимой строки д/б больше заданного мин. колл-ва символов
             break;
         }
         default:

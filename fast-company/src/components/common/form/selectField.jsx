@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 const SelectField = ({
     // Все пропсы и PropTypes идентичны тем, что мы задали в "TextField" кроме "defaultOption"
     title, // Заголовок поля
+    name,
     value, // inputData.profession
     onChange, // handleChange
     defaultOption, // значение отображаемое в поле ввода по умолчанию
@@ -38,7 +39,7 @@ const SelectField = ({
     return (
         <div className="mb-4">
             <label
-                htmlFor="validationCustom04"
+                htmlFor={name}
                 className="form-label"
             >
                 {title}
@@ -46,8 +47,8 @@ const SelectField = ({
             <select
                 // className = "form-select"
                 className= {getInputClasses()} // название класса динамически рендерится при помощи функции "getInputClasses"
-                id = "validationCustom04"
-                name = "profession"
+                id = {name}
+                name = {name}
                 value = {value} // inputData.profession
                 onChange = {handleChange} // handleChange
                 // required  - этот атрибут удаляем

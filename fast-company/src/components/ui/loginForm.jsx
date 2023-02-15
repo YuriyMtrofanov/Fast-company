@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
+import CheckBoxField from "../common/form/checkBoxField";
+// import * as yup from "yup"; // yup можно удалить командой "npm uninstall yup"
 
 const LoginForm = () => {
-    const [inputData, setInputData] = useState({ email: "", password: "" }); // Задаем состояние для всей формы сразу (Информация, вводимая в полях ввода).
+    const [inputData, setInputData] = useState({ email: "", password: "", stayOn: false }); // Задаем состояние для всей формы сразу (Информация, вводимая в полях ввода).
 
-    const handleChange = (target) => { // Создаем обработчик, фиксирующий изменения вводимой информации
-        // console.log("name: ", event.target.name, "value: ", event.target.value);
-        setInputData(prevState => (
-            { ...prevState, [target.name]: target.value }
-        ));
+    const handleChange = (target) => {
+        // console.log("target: ", target); // здесь мы получим undefined так как в этом компоненте мы получаем данные асинхронно
+        // Поэтому мы получаем данные асинхронно в дочернем компоненте, возвращаем их в родительский с помощью "handleChange()" и
+        // записываем их в переменную "target"
+        // if (target) { // данная проверка больше не нужна так как мы прокидываем данные из дочернего компонента синхронно
+        setInputData((prevState) => ({
+            // Как видно в данной форме ключ объе   кта задается динамически, в зависимости от выбранного поля
+            // event позволяет отследить событие в выбранном поле и получить данные этого поля через "target"
+            ...prevState,
+            [target.name]: target.value
+        }));
+        // }
     };
 
     const [errors, setErrors] = useState({});
 
-    // Файл конфигурации (настроек полей) для валидации форм
+    // Файл конфигурации (настроек полей) для валидации форм с помощью функии "validator()"
     const validationConfig = {
         email: {
             isRequired: {
@@ -41,15 +50,47 @@ const LoginForm = () => {
         }
     };
 
+    /* Альтернаативный способ валидации полей с помощью библиотеки "yup"
+    const validationScheme = yup.object().shape({
+        // Проверка свойств полей идет в обратном порядке, поэтому поля указываем также  в обратном порядке
+        password: yup
+            .string()
+            .required("Поле 'Пароль' обязательно к заполнению")
+            .matches(
+                /(?=.*[A-Z])/,
+                "Пароль должен содержать заглавные буквы") // ?= (выполнить проверку) . (1 симфол) * (совпадение) [A-Z] (диапазон заглавных букв)
+            .matches(
+                /(?=.*[0-9])/,
+                "Пароль должен содержать цифры") // ?= (выполнить проверку) . (1 симфол) * (совпадение) [0-9] (диапазон цифр)
+            .matches(
+                /(?=.*[!@#$%^&*])/,
+                "Пароль должен один из спец символов (! @ # $ % ^ & *) ")
+            .matches(
+                /(?=.{8,})/,
+                "Пароль должен содержать минимум из восьми символов"),
+        email: yup
+            .string()
+            .required("Поле Email обязательно к заполнению")
+            .email("Email введен некорректно")
+    });
+    */
     const validate = () => {
+        /* Валидация с помощью "yup"
+        // Так как валидация с помощью "yup" асинхронная, то нам требуется пользоваться асинхронными методами для обработки
+        // Если в фаргументах функции помимо "inputData" указать параметр {abortEarly: false}, будут выведены все ошибки
+        validationScheme.validate(inputData)
+            .then(() => { setErrors({}); })
+            .catch(error => { setErrors({ [error.path]: error.message }); }); // отрицптельный исход. На этом этапе "yup" выдаст ошибку
+        */
+        // Валидация с помощью функии "validator()"
         const errors = validator(inputData, validationConfig);
+        setErrors(errors);
         // Нам больше не нужно валидировать вручную поэтому код ниже удаляем
         // for (const fieldName in inputData) {
         //     if (inputData[fieldName].trim() === "") {
         //         errors[fieldName] = `Поле ${fieldName} дложно быль заполнено`;
         //     }
         // }
-        setErrors(errors);
         return Object.keys(errors).length === 0;
     };
 
@@ -98,6 +139,13 @@ const LoginForm = () => {
                 onChange = {handleChange}
                 error = {errors.password}
             />
+            <CheckBoxField
+                name = "stayOn"
+                value = {inputData.stayOn}
+                onChange = {handleChange}
+            >
+                Оставаться в системе
+            </CheckBoxField>
             <button
                 type="submit"
                 disabled = {!isAbled} // Кнопка активна при отсутствии ошибок т.е. если isDisabled не существует
