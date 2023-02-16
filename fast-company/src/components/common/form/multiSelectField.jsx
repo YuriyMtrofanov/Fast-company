@@ -26,6 +26,7 @@ const MultiSelectField = ({
     // Для парметра "qualities" это значение - массив из объектов с данными качеств qualities: [{}, {}, ...]
     // Такой же обработчик реализуем и в других компонентах форм.
     const handleChange = (value) => {
+        // console.log({ name: name, value });
         onChange({ name: name, value });
         // name получаем из параметров, а value из "handleChange" в родительском компоненте "RegisterForm"
     };

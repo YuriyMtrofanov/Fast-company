@@ -14,7 +14,7 @@ const RegisterForm = () => {
         {
             email: "", // Значение по умолчанию для "email"
             password: "", // Значение по умолчанию для "password"
-            profession: "", // Значение по умолчанию для "profession"
+            professions: "", // Значение по умолчанию для "professions"
             sex: "male", // Значение по умолчанию для "sex"
             qualities: [], // Значение для поля качеств
             licence: false // Значение по умолчаниб для атрибута "value" для <CheckBoxField />
@@ -32,6 +32,7 @@ const RegisterForm = () => {
             ...prevState,
             [target.name]: target.value
         }));
+        console.log("Состояние", { [target.name]: target.value });
         // }
     };
 
