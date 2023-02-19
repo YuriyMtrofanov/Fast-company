@@ -10,6 +10,7 @@ const UserPage = () => {
     const { userId } = useParams();
     const history = useHistory();
     const [user, setUser] = useState();
+    // Переменная содержащая в себе состояние просмотра или редактирования страницы
     const [edit, setEdit] = useState(false);
 
     useEffect(() => {
@@ -24,6 +25,7 @@ const UserPage = () => {
     };
 
     if (user) {
+        console.log(user);
         return (
             <>
                 {edit === false

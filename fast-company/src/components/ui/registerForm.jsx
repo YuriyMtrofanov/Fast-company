@@ -1,189 +1,187 @@
-import React, { useState, useEffect } from "react";
-import TextField from "../common/form/textField";
+import React, { useEffect, useState } from "react";
 import { validator } from "../../utils/validator";
+import TextField from "../common/form/textField";
+import api from "../../api";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
-import api from "../../api";
 import CheckBoxField from "../common/form/checkBoxField";
 
 const RegisterForm = () => {
-    // Задаем состояние для всей страницы т.е. объект, в котором будут храниться все формы сразу
-    // (Информация, вводимая в полях ввода). Для каждого поля добавляем свой собственный параметр
-    const [inputData, setInputData] = useState(
-        {
-            email: "", // Значение по умолчанию для "email"
-            password: "", // Значение по умолчанию для "password"
-            professions: "", // Значение по умолчанию для "professions"
-            sex: "male", // Значение по умолчанию для "sex"
-            qualities: [], // Значение для поля качеств
-            licence: false // Значение по умолчаниб для атрибута "value" для <CheckBoxField />
+    const [data, setData] = useState({
+        email: "",
+        password: "",
+        profession: "",
+        sex: "male",
+        qualities: [],
+        licence: false
+    });
+    const [qualities, setQualities] = useState([]);
+    const [professions, setProfession] = useState([]);
+    const [errors, setErrors] = useState({});
+
+    const getProfessionById = (id) => {
+        for (const prof of professions) {
+            if (prof.value === id) {
+                return { _id: prof.value, name: prof.label };
+            }
         }
-    );
-    // Создаем обработчик, фиксирующий изменения вводимой информации в поле ввода. Мы можем его использовать для
-    // различных форм т.к. функционал идентичен вне зависимости от типа формы. Данная функция вызывается каждый раз
-    // когда в поле ввода ноявляется информация, и затем обновляется состояние переменной "inputData"
+    };
+    const getQualities = (elements) => {
+        const qualitiesArray = [];
+        for (const elem of elements) {
+            for (const quality in qualities) {
+                if (elem.value === qualities[quality].value) {
+                    qualitiesArray.push({
+                        _id: qualities[quality].value,
+                        name: qualities[quality].label,
+                        color: qualities[quality].color
+                    });
+                }
+            }
+        }
+        return qualitiesArray;
+    };
+
+    useEffect(() => {
+        api.professions.fetchAll().then((data) => {
+            const professionsList = Object.keys(data).map((professionName) => ({
+                label: data[professionName].name,
+                value: data[professionName]._id
+            }));
+            setProfession(professionsList);
+        });
+        api.qualities.fetchAll().then((data) => {
+            const qualitiesList = Object.keys(data).map((optionName) => ({
+                value: data[optionName]._id,
+                label: data[optionName].name,
+                color: data[optionName].color
+            }));
+            setQualities(qualitiesList);
+        });
+    }, []);
     const handleChange = (target) => {
-        // console.log("target: ", target); // здесь мы получим undefined
-        // if (target) {
-        setInputData((prevState) => ({
-            // Как видно в данной форме ключ объе   кта задается динамически, в зависимости от выбранного поля
-            // event позволяет отследить событие в выбранном поле и получить данные этого поля через "target"
+        setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
-        console.log("Состояние", { [target.name]: target.value });
-        // }
     };
-
-    // Для реализации выпадающего  списка профессий трелбуется для начала получить "professions" или "qualities"
-    const [professions, setProfessions] = useState();
-    const [qualities, setQualities] = useState();
-
-    useEffect(() => {
-        api.professions.fetchAll().then(data => // асинхронный запрос профессий
-            setProfessions(data)
-        );
-        api.qualities.fetchAll().then(data => // асинхронный запрос качеств
-            setQualities(data)
-        );
-    }, []);
-
-    const [errors, setErrors] = useState({});
-    // Файл конфигурации (настроек полей) для валидации форм
-    const validationConfig = {
+    const validatorConfig = {
         email: {
             isRequired: {
-                message: `Поле Email обязательно к заполнению`
+                message: "Электронная почта обязательна для заполнения"
             },
             isEmail: {
-                message: `Email введен некорректно`
+                message: "Email введен некорректно"
             }
         },
         password: {
             isRequired: {
-                message: `Поле Password обязательно к заполнению`
+                message: "Пароль обязателен для заполнения"
             },
             isCapitalSymbol: {
-                message: `Password должен содержать заглавные буквы`
+                message: "Пароль должен содержать хотя бы одну заглавную букву"
             },
-            isConteinDigit: {
-                message: `Password должен содержать цифры`
+            isContainDigit: {
+                message: "Пароль должен содержать хотя бы одно число"
             },
             min: {
-                message: `Password должен содержать минимум из восьми символов`,
+                message: "Пароль должен состоять минимум из 8 символов",
                 value: 8
             }
         },
         profession: {
             isRequired: {
-                message: `Выберите вашу профессию *Обязательно для заполнения)`
+                message: "Обязательно выберите вашу профессию"
             }
         },
         licence: {
             isRequired: {
-                message: `Для продолжения регистрации требуется подтверждение лицнзионного соглашения`
+                message:
+                    "Вы не можете использовать наш сервис без подтверждения лицензионного соглашения"
             }
         }
     };
-
+    useEffect(() => {
+        validate();
+    }, [data]);
     const validate = () => {
-        const errors = validator(inputData, validationConfig);
-        // Нам больше не нужно валидировать вручную поэтому код ниже удаляем
-        // for (const fieldName in inputData) {
-        //     if (inputData[fieldName].trim() === "") {
-        //         errors[fieldName] = `Поле ${fieldName} дложно быль заполнено`;
-        //     }
-        // }
+        const errors = validator(data, validatorConfig);
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
+    const isValid = Object.keys(errors).length === 0;
 
-    useEffect(() => {
-        validate();
-    }, [inputData]);
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSubmit = (e) => {
+        e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log(inputData); // т.о. если валидация не увенчалась успехом, то console.log блокируется и информация не выводится в консоль
+        const { profession, qualities } = data;
+        console.log({
+            ...data,
+            profession: getProfessionById(profession),
+            qualities: getQualities(qualities)
+        });
     };
-
-    // Переменная для управления кнопкой "Submit". Она принимается в себя условие проверки наличия ошибок в
-    // объекте с ошибками "errors = {}". Если нет записей, значит нет и ключей к записям, значит длина массива
-    // в ключами = 0.
-    const isAbled = Object.keys(errors).length === 0;
-    // console.log(isAbled);
-
     return (
-        <form onSubmit = { handleSubmit }>
-            {/* <div>
-                <label htmlFor="email">Email</label>{" "}
-                <input
-                    type="text"     // или "password"
-                    id="email"      // или "password"
-                    name="email"    // или "password"
-                    value={inputData.email} // inputData - объект с ключами email и password (event.target.name). По данным ключам хранятся данные "event.target.value"
-                    onChange={handleChange}
-                />
-            </div> */}
+        <form onSubmit={handleSubmit}>
             <TextField
-                title = "Email"
-                type = "text"
-                name = "email"
-                value = {inputData.email}
-                onChange = {handleChange}
-                error = {errors.email}
+                label="Электронная почта"
+                name="email"
+                value={data.email}
+                onChange={handleChange}
+                error={errors.email}
             />
             <TextField
-                title = "Password"
-                type = "password"
-                name = "password"
-                value = {inputData.password}
-                onChange = {handleChange}
-                error = {errors.password}
+                label="Пароль"
+                type="password"
+                name="password"
+                value={data.password}
+                onChange={handleChange}
+                error={errors.password}
             />
             <SelectField
-                title = "Веберите вашу профессию" // Название поля
-                name = "professions"
-                value = {inputData.profession} // inputData.profession
-                onChange = {handleChange} // handleChange
-                defaultOption = "Выберите..."
-                options = {professions} // Через этот параметр получаем профессии
-                error = {errors.profession}// метод для ренедринга ошибки
+                label="Выбери свою профессию"
+                defaultOption="Choose..."
+                options={professions}
+                name="profession"
+                onChange={handleChange}
+                value={data.profession}
+                error={errors.profession}
             />
             <RadioField
-                options = {[
+                options={[
                     { name: "Male", value: "male" },
                     { name: "Female", value: "female" },
                     { name: "Other", value: "other" }
                 ]}
-                name = "sex"
-                onChange = {handleChange}
-                value = {inputData.sex}
-                title = "Выберите ваш пол"
+                value={data.sex}
+                name="sex"
+                onChange={handleChange}
+                label="Выберите ваш пол"
             />
             <MultiSelectField
-                title = "Выберите ваши качества"
-                name = "qualities"
-                options = {qualities}
-                onChange = {handleChange}
-                defaultValue = {inputData.qualities}
+                options={qualities}
+                onChange={handleChange}
+                defaultValue={data.qualities}
+                name="qualities"
+                label="Выберите ваши качества"
             />
             <CheckBoxField
-                name = "licence"
-                value = {inputData.licence}
-                onChange = {handleChange}
-                error = {errors.licence}
+                value={data.licence}
+                onChange={handleChange}
+                name="licence"
+                error={errors.licence}
             >
                 Подтвердить <a>лицензионное соглашение</a>
             </CheckBoxField>
             <button
+                className="btn btn-primary w-100 mx-auto"
                 type="submit"
-                disabled = {!isAbled} // Кнопка активна при отсутствии ошибок т.е. если isDisabled не существует
-                className = "btn btn-primary w-100 mx-auto"
-            >Submit</button>
+                disabled={!isValid}
+            >
+                Submit
+            </button>
         </form>
     );
 };

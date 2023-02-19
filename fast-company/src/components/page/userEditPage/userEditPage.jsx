@@ -8,7 +8,7 @@ import MultiSelectField from "../../common/form/multiSelectField";
 import PropTypes from "prop-types";
 
 const UserEditPage = ({ id, name, email, gender }) => {
-    const [inputData, setInputData] = useState({
+    const [userData, setUserData] = useState({
         name: `${name}`,
         email: `${email}`,
         professions: "",
@@ -24,6 +24,7 @@ const UserEditPage = ({ id, name, email, gender }) => {
     ];
     const history = useHistory();
 
+    // Прямой запрос качеств по api
     useEffect(() => {
         api.professions.fetchAll().then(data =>
             setProfessions(data)
@@ -33,8 +34,17 @@ const UserEditPage = ({ id, name, email, gender }) => {
         );
     }, []);
 
+    // Таким образом я изменяю данные, но пока не понял как их записать в localStorage
+    useEffect(() => {
+        // const data = JSON.stringify(userData);
+        console.log({ id, ...userData });
+        // api.users.update(id).then(data => {
+        //     setUserData(data);
+        // });
+    }, [userData]);
+
     const handleChange = (target) => {
-        setInputData((prevState) => ({
+        setUserData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
@@ -45,7 +55,7 @@ const UserEditPage = ({ id, name, email, gender }) => {
         // с помощью этого параметра можем перебрасывать на страницу пользователя при нажатии на кнопку "Сохранить",
         // но в текущей версии ссылка меняется, но переброс не происходит
         history.push(`/users/${id}`);
-        console.log("data", inputData);
+        console.log("data", userData);
     };
 
     return (
@@ -54,20 +64,20 @@ const UserEditPage = ({ id, name, email, gender }) => {
                 title = "Ваше имя"
                 name = "name"
                 type = "text"
-                value = {inputData.name}
+                value = {userData.name}
                 onChange = {handleChange}
             />
             <TextField
                 title = "Email"
                 name = "email"
                 type = "text"
-                value = {inputData.email}
+                value = {userData.email}
                 onChange = {handleChange}
             />
             <SelectField
                 title = "Веберите вашу профессию"
                 name = "professions"
-                value = {inputData.profession}
+                value = {userData.profession}
                 onChange = {handleChange}
                 options = {professions}
                 defaultOption = "Выберите..."
@@ -75,7 +85,7 @@ const UserEditPage = ({ id, name, email, gender }) => {
             <RadioField
                 title = "Выберите ваш пол"
                 name = "sex"
-                value = {inputData.sex}
+                value = {userData.sex}
                 onChange = {handleChange}
                 options = {sex}
                 defaultValue = {gender}
@@ -85,7 +95,7 @@ const UserEditPage = ({ id, name, email, gender }) => {
                 name = "qualities"
                 onChange = {handleChange}
                 options = {qualities}
-                defaultValue = {inputData.qualities}
+                defaultValue = {userData.qualities}
             />
             <button
                 type="submit"

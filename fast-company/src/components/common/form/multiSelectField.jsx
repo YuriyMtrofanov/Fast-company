@@ -3,7 +3,7 @@ import Select from "react-select";
 import PropTypes from "prop-types";
 
 const MultiSelectField = ({
-    title, // Заголовок поля
+    label, // Заголовок поля
     name,
     options, // асинхронно полученные данные "qualities"
     onChange,
@@ -34,7 +34,7 @@ const MultiSelectField = ({
     return (
         <div className="mb-4">
             <label className="form-label">
-                {title}
+                {label}
             </label>
             <Select
                 isMulti // Множественный селект
@@ -55,7 +55,7 @@ MultiSelectField.propTypes = {
     options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     onChange: PropTypes.func,
     name: PropTypes.string,
-    title: PropTypes.string,
+    label: PropTypes.string,
     defaultValue: PropTypes.array
 };
 
