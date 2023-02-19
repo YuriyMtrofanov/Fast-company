@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import api from "../../../api";
 import Qualitie from "../../ui/qualities/qualitie";
 import Loading from "../../ui/loading";
-import UserEditPage from "../userEditPage";
+import EditPage from "../userEditPage";
 
 const UserPage = () => {
     const { userId } = useParams();
@@ -25,7 +25,6 @@ const UserPage = () => {
     };
 
     if (user) {
-        console.log(user);
         return (
             <>
                 {edit === false
@@ -42,15 +41,13 @@ const UserPage = () => {
                     : <div className="container">
                         <div className="row">
                             <div className="col-md-6 offset-md-3 shadow p-4">
-                                <>
-                                    <h3 className="mb-4">Редактировать профиль</h3>
-                                    <UserEditPage
-                                        id = {user._id}
-                                        name = {user.name}
-                                        email = {user.email}
-                                        gender = {user.sex}
-                                    />
-                                </>
+                                <EditPage
+                                    id = {userId}
+                                    // name = {user.name}
+                                    // email = {user.email}
+                                    // gender = {user.sex}
+                                    // profession = {user.profession}
+                                />
                             </div>
                         </div>
                     </div>

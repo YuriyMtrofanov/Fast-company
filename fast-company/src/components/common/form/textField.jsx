@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 const TextField = ({
-    title, // Заголовок поля
+    label, // Заголовок поля
     type,
     name,
     value,
@@ -26,7 +26,7 @@ const TextField = ({
 
     return (
         <div className="mb-4">
-            <label htmlFor={name}>{ title }</label>
+            <label htmlFor={name}>{ label }</label>
             <div className="input-group has-validation">
                 <input
                     type = {showPassword ? "text" : type} // Если showPassword = true, то type="text" если false, то type = параметру, передаваемому с props
@@ -55,7 +55,7 @@ const TextField = ({
 };
 
 TextField.propTypes = {
-    title: PropTypes.string,
+    label: PropTypes.string,
     type: PropTypes.string,
     name: PropTypes.string,
     value: PropTypes.string,

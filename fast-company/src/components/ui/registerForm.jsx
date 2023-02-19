@@ -103,6 +103,10 @@ const RegisterForm = () => {
         }
     };
     useEffect(() => {
+        console.log(professions);
+    }, [data]);
+
+    useEffect(() => {
         validate();
     }, [data]);
     const validate = () => {
@@ -142,7 +146,7 @@ const RegisterForm = () => {
             />
             <SelectField
                 label="Выбери свою профессию"
-                defaultOption="Choose..."
+                defaultOption="Выберите..."
                 options={professions}
                 name="profession"
                 onChange={handleChange}
