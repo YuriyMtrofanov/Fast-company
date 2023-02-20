@@ -27,6 +27,11 @@ const RegisterForm = () => {
             }
         }
     };
+
+    useEffect(() => {
+        console.log("data.qualities", data.qualities);
+    });
+
     const getQualities = (elements) => {
         const qualitiesArray = [];
         for (const elem of elements) {
@@ -102,9 +107,6 @@ const RegisterForm = () => {
             }
         }
     };
-    useEffect(() => {
-        console.log(professions);
-    }, [data]);
 
     useEffect(() => {
         validate();

@@ -21,7 +21,7 @@ const SelectField = ({
         !Array.isArray(options) && typeof options === "object"
             ? Object.values(options)
             : options;
-    // console.log(optionsArray.length > 0);
+    // console.log("optionsArray", optionsArray);
     return (
         <div className="mb-4">
             <label htmlFor={name} className="form-label">
@@ -35,6 +35,7 @@ const SelectField = ({
                 onChange={handleChange}
             >
                 <option disabled value="">
+                    {/* <option selected = {value === ""} value=""> */}
                     {defaultOption}
                 </option>
                 {optionsArray.length > 0 &&

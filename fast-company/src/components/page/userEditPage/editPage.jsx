@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
@@ -7,25 +8,48 @@ import PropTypes from "prop-types";
 import api from "../../../api";
 
 const EditPage = ({ id }) => {
+    // const [userData, setUserData] = useState({
+    //     name: "",
+    //     email: "",
+    //     profession: {},
+    //     qualities: [],
+    //     sex: "male"
+    // });
     const [userData, setUserData] = useState({
-        name: "",
-        email: "",
-        profession: {},
-        qualities: [],
-        sex: "male"
+        // _id: "",
+        // name: "",
+        // email: "",
+        // sex: "male",
+        // profession: "",
+        // qualities: "",
+        // completedMeetings: "",
+        // rate: "",
+        // bookmark: false
     });
     const [qualities, setQualities] = useState([]);
     const [professions, setProfession] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         api.users.getById(id).then(data => {
+            // const newQualities = Object.keys(data.qualities).map((optionName) => ({
+            //     value: data.qualities[optionName]._id,
+            //     label: data.qualities[optionName].name,
+            //     color: data.qualities[optionName].color
+            // }));
             const newData = {
+                _id: data._id,
                 name: data.name,
                 email: data.email,
-                profession: data.profession,
-                qualities: data.qualities,
-                sex: data.sex
+                sex: data.sex,
+                profession: data.profession._id,
+                // qualities: newQualities,
+                qualities: data.qualitie,
+                completedMeetings: data.completedMeetings,
+                rate: data.rate,
+                bookmark: data.bookmark
             };
+            // console.log("newQualities", newQualities);
             setUserData(newData);
         });
         api.professions.fetchAll().then((data) => {
@@ -42,12 +66,13 @@ const EditPage = ({ id }) => {
                 color: data[optionName].color
             }));
             setQualities(qualitiesList);
+            console.log("qualitiesList", qualitiesList);
         });
     }, []);
 
     // Для проверки данных
     useEffect(() => {
-        console.log("professions", professions);
+        // console.log("userData.qualities", userData.qualities);
     });
 
     const handleChange = (target) => {
@@ -59,17 +84,20 @@ const EditPage = ({ id }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // const isValid = validate();
-        // if (!isValid) return;
-        // const { profession, qualities } = data;
-        // console.log({
-        //     ...data,
-        //     profession: getProfessionById(profession),
-        //     qualities: getQualities(qualities)
-        // });
-    };
+        history.push(`/users/${id}/`);
+        // const localInfo = JSON.parse(localStorage.getItem("users")).find(
+        //     (user) => user._id === id
+        // );
+        console.log("отправка данных",
+            { ...userData }
+            // localInfo,
+            // Object.keys(userData).map(key => localInfo[key])
+        );
 
-    if (userData.qualities.length > 0) {
+        // const { profession } = userData;
+        // console.log("profession", profession);
+    };
+    if (userData.name) {
         return (
             <>
                 <h3 className="mb-4">Редактировать профиль</h3>
@@ -92,8 +120,8 @@ const EditPage = ({ id }) => {
                         label = "Выбери свою профессию"
                         name = "profession"
                         options = { professions }
-                        defaultOption="Выберите..."
-                        value = { userData.profession.label }
+                        defaultOption = "Выберете..."
+                        value = { userData.profession } // Значение по умолчанию
                         onChange = { handleChange }
                     />
                     <RadioField
@@ -113,8 +141,14 @@ const EditPage = ({ id }) => {
                         name = "qualities"
                         options = { qualities }
                         onChange = { handleChange }
-                        defaultValue = { userData.qualities.label }
+                        defaultOption = { userData.qualities }
                     />
+                    <button
+                        className="btn btn-primary w-100 mx-auto"
+                        type="submit"
+                    >
+                        Submit
+                    </button>
                 </form>
             </>
         );
