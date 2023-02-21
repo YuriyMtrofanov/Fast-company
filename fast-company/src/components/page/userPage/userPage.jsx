@@ -21,11 +21,13 @@ const UserPage = () => {
 
     const changeFormType = () => {
         setFormType(prevState => prevState === "edit" ? "user" : "edit");
-        if (formType === "user") {
-            history.push(`/users/${userId}/edit`);
-        } else {
-            history.push(`/users/${userId}`);
-        }
+        history.push(`/users/${userId}/edit`);
+        // Либо вот такое решение. Тоже работает
+        // if (formType === "user") {
+        //     history.push(`/users/${userId}/edit`);
+        // } else {
+        //     history.push(`/users/${userId}`);
+        // }
     };
 
     if (user) {

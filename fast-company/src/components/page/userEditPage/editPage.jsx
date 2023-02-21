@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
@@ -20,7 +20,7 @@ const EditPage = ({ id, onChange }) => {
     });
     const [qualities, setQualities] = useState([]);
     const [professions, setProfession] = useState([]);
-    // const history = useHistory();
+    const history = useHistory();
 
     useEffect(() => {
         api.professions.fetchAll().then((data) => {
@@ -30,14 +30,12 @@ const EditPage = ({ id, onChange }) => {
             }));
             setProfession(professionsList);
         });
-        // Данные качества отправляются на отрисовску списка качеств.
         api.qualities.fetchAll().then((data) => {
             const qualitiesList = Object.keys(data).map((optionName) => ({
                 value: data[optionName]._id,
                 label: data[optionName].name,
                 color: data[optionName].color
             }));
-            // JSON.parse(JSON.stringify(qualitiesList));
             setQualities(qualitiesList);
         });
         api.users.getById(id).then(data => {
@@ -63,7 +61,6 @@ const EditPage = ({ id, onChange }) => {
     }, []);
 
     const handleChange = (target) => {
-        // console.log("target", { [target.name]: target.value });
         setUserData((prevState) => ({
             ...prevState,
             [target.name]: target.value
@@ -99,17 +96,6 @@ const EditPage = ({ id, onChange }) => {
         return qualitiesArray;
     };
 
-    useEffect(() => {
-        // const { profession, qualities } = userData;
-        // Записываем изменения в промежуточную переменную для дальнейшего экспорта в localStorage
-        // const exportData = {
-        //     ...userData,
-        //     profession: getProfessionById(profession),
-        //     qualities: getQualities(qualities)
-        // };
-        // api.users.update(id, data).then();
-    }, []);
-
     const handleSubmit = (event) => {
         event.preventDefault();
         // Записываем изменения в промежуточную переменную для дальнейшего экспорта в localStorage
@@ -121,6 +107,7 @@ const EditPage = ({ id, onChange }) => {
         };
         api.users.update(id, exportData).then();
         onChange("user");
+        history.push(`/users/${id}`);
     };
 
     if (userData.name) {
@@ -147,7 +134,7 @@ const EditPage = ({ id, onChange }) => {
                         name = "profession"
                         options = { professions }
                         defaultOption = "Выберете..."
-                        value = { userData.profession } // Значение по умолчанию
+                        value = { userData.profession }
                         onChange = { handleChange }
                     />
                     <RadioField
