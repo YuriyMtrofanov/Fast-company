@@ -43,10 +43,11 @@ const UserPage = () => {
                             <div className="col-md-6 offset-md-3 shadow p-4">
                                 <EditPage
                                     id = {userId}
-                                    // name = {user.name}
-                                    // email = {user.email}
-                                    // gender = {user.sex}
-                                    // profession = {user.profession}
+                                    name = {user.name}
+                                    email = {user.email}
+                                    gender = {user.sex}
+                                    profession = {user.profession}
+                                    qualities = {user.qualities}
                                 />
                             </div>
                         </div>

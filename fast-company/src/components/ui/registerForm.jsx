@@ -30,7 +30,7 @@ const RegisterForm = () => {
 
     useEffect(() => {
         console.log("data.qualities", data.qualities);
-    });
+    }, [qualities]);
 
     const getQualities = (elements) => {
         const qualitiesArray = [];
@@ -66,6 +66,7 @@ const RegisterForm = () => {
         });
     }, []);
     const handleChange = (target) => {
+        console.log("target", { [target.name]: target.value });
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
