@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { UpDownIcon } from "./upDownIcon";
+import { UpDownIcon } from "../../ui/upDownIcon";
 
-export const TableHeader = ({ onSort, selectedSort, columns }) => {
+const TableHeader = ({ onSort, selectedSort, columns }) => {
     const handleSort = (item) => {
         if (selectedSort.iter === item) {
             onSort({ iter: selectedSort.iter, order: selectedSort.order === "asc" ? "desc" : "asc" });
@@ -43,3 +43,5 @@ TableHeader.propTypes = {
     selectedSort: PropTypes.object.isRequired,
     columns: PropTypes.object.isRequired
 };
+
+export default TableHeader;

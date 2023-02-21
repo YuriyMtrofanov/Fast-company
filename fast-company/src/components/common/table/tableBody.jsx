@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import _ from "lodash";
 
-export const TableBody = ({ data, columns }) => {
+const TableBody = ({ data, columns }) => {
     const renderContent = (item, column) => {
         if (columns[column].component) {
             const component = columns[column].component;
@@ -46,3 +46,5 @@ TableBody.propTypes = {
     columns: PropTypes.object.isRequired,
     inputData: PropTypes.string
 };
+
+export default TableBody;
