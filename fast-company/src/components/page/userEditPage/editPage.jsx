@@ -7,7 +7,7 @@ import MultiSelectField from "../../common/form/multiSelectField";
 import PropTypes from "prop-types";
 import api from "../../../api";
 
-const EditPage = ({ id }) => {
+const EditPage = ({ id, onChange }) => {
     const [userData, setUserData] = useState({
         name: "",
         email: "",
@@ -112,7 +112,6 @@ const EditPage = ({ id }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // history.push(`/users/${id}/`);
         // Записываем изменения в промежуточную переменную для дальнейшего экспорта в localStorage
         const { profession, qualities } = userData;
         const exportData = {
@@ -120,8 +119,8 @@ const EditPage = ({ id }) => {
             profession: getProfessionById(profession),
             qualities: getQualities(qualities)
         };
-        console.log(exportData);
         api.users.update(id, exportData).then();
+        onChange("user");
     };
 
     if (userData.name) {
@@ -185,7 +184,8 @@ const EditPage = ({ id }) => {
 };
 
 EditPage.propTypes = {
-    id: PropTypes.string
+    id: PropTypes.string,
+    onChange: PropTypes.func
 };
 
 export default EditPage;

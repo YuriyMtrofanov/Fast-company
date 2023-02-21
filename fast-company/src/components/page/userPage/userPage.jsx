@@ -10,25 +10,28 @@ const UserPage = () => {
     const { userId } = useParams();
     const history = useHistory();
     const [user, setUser] = useState();
-    // Переменная содержащая в себе состояние просмотра или редактирования страницы
-    const [edit, setEdit] = useState(false);
+    const { type } = useParams();
+    const [formType, setFormType] = useState(type === "edit" ? type : "user");
 
     useEffect(() => {
         api.users.getById(userId).then(data => {
             setUser(data);
-            console.log(data);
         });
-    }, []);
+    }, [formType]);
 
-    const handleChange = () => {
-        history.push(`/users/${userId}/edit`);
-        setEdit(prevState => !prevState);
+    const changeFormType = () => {
+        setFormType(prevState => prevState === "edit" ? "user" : "edit");
+        if (formType === "user") {
+            history.push(`/users/${userId}/edit`);
+        } else {
+            history.push(`/users/${userId}`);
+        }
     };
 
     if (user) {
         return (
             <>
-                {edit === false
+                {formType === "user"
                     ? <div>
                         <h1> {user.name} </h1>
                         <h2> Профессия: {user.profession.name} </h2>
@@ -37,18 +40,14 @@ const UserPage = () => {
                         })}
                         <h5> Встретился, раз: {user.completedMeetings} </h5>
                         <h2>Оценка: {user.rate}</h2>
-                        <button onClick = {() => handleChange()}> Изменить </button>
+                        <button onClick = {() => changeFormType()}> Изменить </button>
                     </div>
                     : <div className="container">
                         <div className="row">
                             <div className="col-md-6 offset-md-3 shadow p-4">
                                 <EditPage
                                     id = {userId}
-                                    name = {user.name}
-                                    email = {user.email}
-                                    gender = {user.sex}
-                                    profession = {user.profession}
-                                    qualities = {user.qualities}
+                                    onChange = {changeFormType}
                                 />
                             </div>
                         </div>
