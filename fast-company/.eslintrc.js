@@ -23,8 +23,12 @@ module.exports = {
         // Отсутствие пробела перед скобками при обозначении функции
         "space-before-function-paren": ["error", {anonymous: "always", named: "never"}],
 
+        "space-comment": ["off"],
+
         // Ошибка: Strings must use singlequote
         // Строковые значения оформляются одинарными кавычками
-        quotes: ["error", "double", { allowTemplateLiterals: true }]
+        quotes: ["error", "double", { allowTemplateLiterals: true }],
+
+        // "multiline-ternary": ["off"] // Отключение переноса строк в тернарных выражениях
     }
 };
