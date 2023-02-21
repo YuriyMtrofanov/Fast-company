@@ -20,6 +20,9 @@ const RegisterForm = () => {
     const [professions, setProfession] = useState([]);
     const [errors, setErrors] = useState({});
 
+    // Данный метод позволяет получить объект профессии по её id. Это понадобится для
+    // обртного преобразования данных к исходному виду, который записан в user
+    // с ключами {_id: '', name: '', color: ''}
     const getProfessionById = (id) => {
         for (const prof of professions) {
             if (prof.value === id) {
@@ -28,10 +31,8 @@ const RegisterForm = () => {
         }
     };
 
-    useEffect(() => {
-        console.log("data.qualities", data.qualities);
-    }, [qualities]);
-
+    // Данный метод позволяет получить объект профессии по её id. Это понадобится для
+    // обртного преобразования данных к исходному виду, который записан в user
     const getQualities = (elements) => {
         const qualitiesArray = [];
         for (const elem of elements) {
@@ -66,7 +67,7 @@ const RegisterForm = () => {
         });
     }, []);
     const handleChange = (target) => {
-        console.log("target", { [target.name]: target.value });
+        // console.log("target", { [target.name]: target.value });
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
@@ -150,10 +151,10 @@ const RegisterForm = () => {
             <SelectField
                 label="Выбери свою профессию"
                 defaultOption="Выберите..."
-                options={professions}
+                options={professions} // Этот атрибут передает список опций (профессий)
                 name="profession"
                 onChange={handleChange}
-                value={data.profession}
+                value={data.profession} // Этот атрибут передает значение (профессии) выбранной по умолчанию
                 error={errors.profession}
             />
             <RadioField

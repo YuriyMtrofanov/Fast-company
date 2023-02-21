@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
@@ -13,11 +13,14 @@ const EditPage = ({ id }) => {
         email: "",
         sex: "male",
         profession: "",
-        qualities: []
+        qualities: [],
+        completedMeetings: "",
+        rate: "",
+        bookmark: ""
     });
     const [qualities, setQualities] = useState([]);
     const [professions, setProfession] = useState([]);
-    const history = useHistory();
+    // const history = useHistory();
 
     useEffect(() => {
         api.professions.fetchAll().then((data) => {
@@ -34,7 +37,7 @@ const EditPage = ({ id }) => {
                 label: data[optionName].name,
                 color: data[optionName].color
             }));
-            JSON.parse(JSON.stringify(qualitiesList));
+            // JSON.parse(JSON.stringify(qualitiesList));
             setQualities(qualitiesList);
         });
         api.users.getById(id).then(data => {
@@ -45,41 +48,82 @@ const EditPage = ({ id }) => {
                 label: data.qualities[optionName].name,
                 color: data.qualities[optionName].color
             }));
-            JSON.parse(JSON.stringify(newQualities));
             const newData = {
                 name: data.name,
                 email: data.email,
                 sex: data.sex,
-                defaultProfession: data.profession._id,
-                qualities: newQualities
+                profession: data.profession._id,
+                qualities: newQualities,
+                completedMeetings: data.completedMeetings,
+                rate: data.rate,
+                bookmark: data.bookmark
             };
             setUserData(newData);
         });
     }, []);
 
     const handleChange = (target) => {
-        console.log("target", { [target.name]: target.value });
+        // console.log("target", { [target.name]: target.value });
         setUserData((prevState) => ({
             ...prevState,
             [target.name]: target.value
         }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        history.push(`/users/${id}/`);
-        const localInfo = JSON.parse(localStorage.getItem("users")).find(
-            (user) => user._id === id
-        );
-        console.log("отправка данных",
-            { ...userData },
-            localInfo,
-            Object.keys(userData).map(key => localInfo[key])
-        );
-
-        const { profession } = userData;
-        console.log("profession", profession);
+    // Данный метод позволяет получить объект профессии по её id. Это понадобится для
+    // обртного преобразования данных к исходному виду, который записан в user
+    const getProfessionById = (id) => {
+        for (const prof of professions) {
+            if (prof.value === id) {
+                return { _id: prof.value, name: prof.label };
+            }
+        }
     };
+
+    // Данный метод позволяет получить объект профессии по её id. Это понадобится для
+    // обртного преобразования данных к исходному виду, который записан в user
+    // с ключами {_id: '', name: '', color: ''}
+    const getQualities = (elements) => {
+        const qualitiesArray = [];
+        for (const elem of elements) {
+            for (const quality in qualities) {
+                if (elem.value === qualities[quality].value) {
+                    qualitiesArray.push({
+                        _id: qualities[quality].value,
+                        name: qualities[quality].label,
+                        color: qualities[quality].color
+                    });
+                }
+            }
+        }
+        return qualitiesArray;
+    };
+
+    useEffect(() => {
+        // const { profession, qualities } = userData;
+        // Записываем изменения в промежуточную переменную для дальнейшего экспорта в localStorage
+        // const exportData = {
+        //     ...userData,
+        //     profession: getProfessionById(profession),
+        //     qualities: getQualities(qualities)
+        // };
+        // api.users.update(id, data).then();
+    }, []);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        // history.push(`/users/${id}/`);
+        // Записываем изменения в промежуточную переменную для дальнейшего экспорта в localStorage
+        const { profession, qualities } = userData;
+        const exportData = {
+            ...userData,
+            profession: getProfessionById(profession),
+            qualities: getQualities(qualities)
+        };
+        console.log(exportData);
+        api.users.update(id, exportData).then();
+    };
+
     if (userData.name) {
         return (
             <>
@@ -104,7 +148,7 @@ const EditPage = ({ id }) => {
                         name = "profession"
                         options = { professions }
                         defaultOption = "Выберете..."
-                        value = { userData.defaultProfession } // Значение по умолчанию
+                        value = { userData.profession } // Значение по умолчанию
                         onChange = { handleChange }
                     />
                     <RadioField
