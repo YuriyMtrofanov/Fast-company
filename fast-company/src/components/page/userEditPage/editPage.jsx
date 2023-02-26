@@ -21,6 +21,7 @@ const EditUserPage = () => {
     const [professions, setProfession] = useState([]);
     const [qualities, setQualities] = useState([]);
     const [errors, setErrors] = useState({});
+
     const getProfessionById = (id) => {
         for (const prof of professions) {
             if (prof.value === id) {

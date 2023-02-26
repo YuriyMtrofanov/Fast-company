@@ -178,15 +178,10 @@ const fetchAll = () =>
     });
 const update = (id, data) =>
     new Promise((resolve) => {
-        // получаем данные "users" из localStorage и записываем их в переменную
         const users = JSON.parse(localStorage.getItem("users"));
-        // перебираем всех юзеров и если id юзера совпадает с переданным в качестве параметра, то возвращаем его индекс и записываем в переменную
         const userIndex = users.findIndex((u) => u._id === id);
-        // обращаемся к юзеру в исходном массиве по полученному индексу и записываем в него передаваемые данные "data" с помощью spread синтаксиса
         users[userIndex] = { ...users[userIndex], ...data };
-        // парсим полученные данные в строку и пушим их в localStorage
         localStorage.setItem("users", JSON.stringify(users));
-        // в результате положительного исхода метода "then" возвращаем объект юзера
         resolve(users[userIndex]);
     });
 
