@@ -58,13 +58,10 @@ const usersListPage = () => {
         setSortBy(item);
     };
 
-    // Функция-обработчик событий на кнопке очистки списка профессий
     const handleClearList = () => {
         setSelectedProperty();
     };
 
-    // При выборе профессии выполняется проверка на содержании символов в поле поиска, есои данные введены, то
-    // задаем для него пустую строку в качестве состояния (т.е. очищаем поле ввода)
     const handleItemSelect = (params) => {
         setSelectedProperty(params);
         if (inputData) {
@@ -72,14 +69,11 @@ const usersListPage = () => {
         }
     };
 
-    // обработчик, записывающий данные из поля ввода в переменную "inputData".
-    // При вводе текста в поле ввода первым делом очищаем фильтр по проыессии с помощью setSelectedProperty()
     const handleInputChange = (target) => {
         handleClearList();
         setInputData(target.value);
     };
 
-    // обработчик отправки данных на сервер. Пока не задействован.
     const handleSubmit = (target) => {
         // preventDefault();
         // console.log(target);
@@ -87,10 +81,8 @@ const usersListPage = () => {
 
     if (users) {
         let filteredUsers = users;
-        // Если в поле ввода введены данные, то реализую поиск по сочетанию символов в именах
         if (inputData) {
             filteredUsers = users.filter(user => user.name.toLowerCase().includes(inputData));
-        // Если выбрана профессия, то реализую поиск по профессиям
         } else if (selectedProperty) {
             filteredUsers = users.filter(user => user.profession._id === selectedProperty);
         };

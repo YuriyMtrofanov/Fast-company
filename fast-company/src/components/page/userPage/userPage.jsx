@@ -1,67 +1,36 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import api from "../../../api";
-import Qualitie from "../../ui/qualities/qualitie";
-import Loading from "../../ui/loading";
-import EditPage from "../userEditPage";
+import Qualities from "../../ui/qualities";
+import { useHistory } from "react-router-dom";
 
-const UserPage = () => {
-    const { userId } = useParams();
+const UserPage = ({ userId }) => {
     const history = useHistory();
     const [user, setUser] = useState();
-    const { type } = useParams();
-    const [formType, setFormType] = useState(type === "edit" ? type : "user");
-
     useEffect(() => {
-        api.users.getById(userId).then(data => {
-            setUser(data);
-        });
-    }, [formType]);
-
-    const changeFormType = () => {
-        setFormType(prevState => prevState === "edit" ? "user" : "edit");
-        if (formType === "user") {
-            history.push(`/users/${userId}/edit`);
-        } else {
-            history.push(`/users/${userId}`);
-        }
+        api.users.getById(userId).then((data) => setUser(data));
+    }, []);
+    const handleClick = () => {
+        history.push(history.location.pathname + "/edit");
     };
-
     if (user) {
         return (
-            <>
-                {formType === "user"
-                    ? <div>
-                        <h1> {user.name} </h1>
-                        <h2> Профессия: {user.profession.name} </h2>
-                        {user.qualities.map(qualitie => {
-                            return (<Qualitie key = { qualitie._id } { ...qualitie } />);
-                        })}
-                        <h5> Встретился, раз: {user.completedMeetings} </h5>
-                        <h2>Оценка: {user.rate}</h2>
-                        <button onClick = {() => changeFormType()}> Изменить </button>
-                    </div>
-                    : <div className="container">
-                        <div className="row">
-                            <div className="col-md-6 offset-md-3 shadow p-4">
-                                <EditPage
-                                    id = {userId}
-                                    onChange = {changeFormType}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                }
-            </>
+            <div>
+                <h1> {user.name}</h1>
+                <h2>Профессия: {user.profession.name}</h2>
+                <Qualities qualities={user.qualities} />
+                <p>completedMeetings: {user.completedMeetings}</p>
+                <h2>Rate: {user.rate}</h2>
+                <button onClick={handleClick}>Изменить</button>
+            </div>
         );
     } else {
-        return (<Loading />);
-    };
+        return <h1>Loading</h1>;
+    }
 };
 
 UserPage.propTypes = {
-    userId: PropTypes.string
+    userId: PropTypes.string.isRequired
 };
 
 export default UserPage;
