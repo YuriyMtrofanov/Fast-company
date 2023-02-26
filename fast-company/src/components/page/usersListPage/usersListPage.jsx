@@ -81,10 +81,8 @@ const usersListPage = () => {
 
     if (users) {
         let filteredUsers = users;
-        // Если в поле ввода введены данные, то реализую поиск по сочетанию символов в именах
         if (inputData) {
             filteredUsers = users.filter(user => user.name.toLowerCase().includes(inputData));
-        // Если выбрана профессия, то реализую поиск по профессиям
         } else if (selectedProperty) {
             filteredUsers = users.filter(user => user.profession._id === selectedProperty);
         };

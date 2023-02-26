@@ -5,11 +5,7 @@ import RegisterForm from "../components/ui/registerForm";
 
 const Login = () => {
     const { type } = useParams();
-    // По умолчанию открывается форма Login, однако правильнее будет установить условие:
-    // Если type = "register", то мы возвращаем "register", в противном случае если передан
-    // любой другой парметр, мы задаем type = "login" для переадресации на "login"
     const [formType, setFormType] = useState(type === "register" ? type : "login");
-    // В зависимости от "formType" нам нужно отобразить "LoginForm" или "RegisterForm"
 
     const changeFormType = () => {
         setFormType(prevState => prevState === "register" ? "login" : "register");
