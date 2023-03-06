@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 const TextField = ({
-    label, // Заголовок поля
+    label,
     type,
     name,
     value,

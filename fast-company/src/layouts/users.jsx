@@ -11,7 +11,9 @@ const Users = () => {
     return (
         <>
             {userId
-                ? (edit ? <EditPage/> : <UserPage userId = {userId}/>)
+                ? (edit
+                    ? <EditPage/>
+                    : <UserPage userId = {userId}/>)
                 : (<UsersListPage />)
             }
         </>
