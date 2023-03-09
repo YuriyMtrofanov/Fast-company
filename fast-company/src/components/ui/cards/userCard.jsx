@@ -1,47 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
-import API from "../../../api";
 
-const UserCard = ({ userId }) => {
-    const [user, setUser] = useState();
-    useEffect(() => {
-        API.users.getById(userId).then((data) => setUser(data));
-    }, []);
-
+const UserCard = ({ data }) => {
+    const history = useHistory();
     const handleClick = () => {
-        console.log("click to settings icon");
+        history.push(history.location.pathname + "/edit");
     };
-    if (user) {
-        return (
-            <div className="card mb-3">
-                <div className="card-body">
-                    <button className="position-absolute top-0 end-0 btn btn-light btn-sm" onClick = {handleClick}>
-                        <i className="bi bi-gear"></i>
-                    </button>
-                    <div className="d-flex flex-column align-items-center text-center position-relative">
-                        <img
-                            src="https://avatars.dicebear.com/api/avataaars/qweqwdas.svg"
-                            className="rounded-circle"
-                            width="150"
-                        />
-                        <div className="mt-3">
-                            <h4>{user.name}</h4>
-                            <p className="text-secondary mb-1">{user.profession.name}</p>
-                            <div className="text-muted">
-                                <i className="bi bi-caret-down-fill text-primary" role="button"></i>
-                                <i className="bi bi-caret-up text-secondary" role="button"></i>
-                                <span className="ms-2">{user.rate}</span>
-                            </div>
+    return (
+        <div className="card mb-3">
+            <div className="card-body">
+                <button
+                    className="position-absolute top-0 end-0 btn btn-light btn-sm"
+                    onClick = {handleClick}
+                >
+                    <i className="bi bi-gear"></i>
+                </button>
+                <div className="d-flex flex-column align-items-center text-center position-relative">
+                    <img
+                        src={`https://avatars.dicebear.com/api/avataaars/${(
+                            Math.random() + 1
+                        )
+                            .toString(36)
+                            .substring(7)}.svg`}
+                        className="rounded-circle shadow-1-strong me-3"
+                        alt="avatar"
+                        width="200"
+                        height="200"
+                    />
+                    <div className="mt-3">
+                        <h4>{data.name}</h4>
+                        <p className="text-secondary mb-1">{data.profession.name}</p>
+                        <div className="text-muted">
+                            <i className="bi bi-caret-down-fill text-primary" role="button"></i>
+                            <i className="bi bi-caret-up text-secondary" role="button"></i>
+                            <span className="ms-2">{data.rate}</span>
                         </div>
                     </div>
                 </div>
             </div>
-        );
-    };
+        </div>
+    );
 };
 
 UserCard.propTypes = {
-    userId: PropTypes.string.isRequired
+    data: PropTypes.object.isRequired
 };
 
 export default UserCard;
