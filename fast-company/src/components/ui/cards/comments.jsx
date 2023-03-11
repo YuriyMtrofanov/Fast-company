@@ -13,7 +13,6 @@ const Comments = () => {
         API.comments.fetchCommentsForUser(userId).then(data => setComments(data));
     }, []);
     const handleRemove = (id) => {
-        console.log("remove", id);
         API.comments.remove(id).then(id => {
             const changedComments = comments.filter((comment) => {
                 return comment._id !== id;
@@ -22,13 +21,8 @@ const Comments = () => {
         });
     };
     const handleSubmit = (data) => {
-        console.log("data", {
-            ...data,
-            created_at: Date.now(),
-            _id: Math.random().toString(36).substring(2, 9)
-        });
         API.comments.add({ ...data, pageId: userId }).then(comment => setComments([...comments, comment]));
-        console.log(comments);
+        // console.log(comments);
     };
     return (
         <>

@@ -12,11 +12,11 @@ const SelectField = ({
 }) => {
     const handleChange = ({ target }) => {
         onChange({ name: target.name, value: target.value });
+        console.log("target", target);
     };
     const getInputClasses = () => {
         return "form-select" + (error ? " is-invalid" : "");
     };
-
     // Данный метод позволяет не зависеть от типа входящих данных (объект или массив)
     // Он преобразует данные в массив. Т.е. мы проверяем, если поступает объект, то
     // он парсится в массив, а если поступает массив, то он просто записывается в

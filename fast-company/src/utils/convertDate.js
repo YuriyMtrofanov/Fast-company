@@ -1,3 +1,2 @@
-// export function convertDate(){
-
-// };
+export function convertDate() {
+};

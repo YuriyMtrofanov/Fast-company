@@ -1,110 +1,76 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import API from "../../../api";
-import { useParams } from "react-router-dom";
 import SelectField from "../form/selectField";
+import TextAreaField from "../form/textAreaField";
 
 const AddCommentForm = ({ onSubmit }) => {
-    const { userId } = useParams();
     const [data, setData] = useState({
-        user: "",
-        comment: ""
+        userId: "", // id пользователя
+        content: "" // содержание комментария
     });
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState({});
+
+    const handleChange = (target) => {
+        setData((prevState) => ({
+            ...prevState,
+            [target.name]: target.value
+        }));
+        console.log(data);
+    };
+
     useEffect(() => {
         API.users.fetchAll().then((data) => {
-            const usersList = Object.keys(data).map((user) => ({
-                name: data[user].name,
-                value: data[user]._id
+            const usersList = Object.keys(data).map((userId) => ({
+                label: data[userId].name,
+                value: data[userId]._id
             }));
             setUsers(usersList);
         });
     }, []);
 
-    const handleChange = ({ target }) => {
-        setData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
-        // console.log("value", { [target.name]: target.value });
-        // console.log("target", target);
+    const clearForm = () => {
+        setData({
+            userId: "",
+            content: ""
+        });
+        // setErrors({});
     };
-    // const clearForm = () => {
-    //     setData({ user: "", comment: "" });
-    // };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        const exportData = {
-            userId: data.user, // автор поста
-            pageId: userId, // страница пользователя, на которой размещен пост
-            content: data.comment // содержание поста
-        };
-        // console.log("exportData", {
-        //     userId: data.user, // автор поста
-        //     pageId: userId, // страница пользователя, на которой размещен пост
-        //     content: data.comment // содержание поста
-        // });
-        onSubmit(exportData);
-        // clearForm();
-        console.log(data);
-        // setData({
-        //     user: "",
-        //     comment: ""
-        // });
+        onSubmit(data);
+        clearForm();
     };
+
     return (
         <>
             <form onSubmit = {handleSubmit}>
                 <div className="card-body">
-                    <div>
-                        <h2>New comment</h2>
-                        {/* <div className="mb-4">
-                            <select
-                                className = "form-select"
-                                id = "userId"
-                                name = "user"
-                                value = {data.name}
-                                onChange = {handleChange}
-                            >
-                                <option disabled value="">
-                                    Выберете пользователя
-                                </option>
-                                {users &&
-                                    users.map((user) => (
-                                        <option
-                                            key = {user.value}
-                                            value = {user.value}
-                                        >{user.name}</option>
-                                    ))}
-                            </select>
-                        </div> */}
-                        <SelectField
-                            label="New comment"
-                            defaultOption="Выберете пользователя"
-                            options={users}
-                            name="user"
-                            onChange={handleChange}
-                            value={data.user}
-                        />
-                        <div className="mb-4">
-                            <label
-                                htmlFor = "comment"
-                                className = "form-label"
-                            >Сообщение</label>
-                            <textarea
+                    {Object.keys(users).length > 0 &&
+                        <div>
+                            <h2>New comment</h2>
+                            <SelectField
+                                label="New comment"
+                                defaultOption="Выберете пользователя"
+                                options={users}
+                                name="userId"
+                                onChange={handleChange}
+                                value={data.userId}
+                            />
+                            <TextAreaField
                                 type = "text"
-                                className="form-control"
-                                id="comment"
-                                name="comment"
-                                rows="3"
+                                id = "content"
+                                name = "content"
+                                value = {data.content}
+                                rows= "3"
                                 onChange = {handleChange}
-                            ></textarea>
-                        </div>
-                        <button
-                            type = "submit"
-                            className = "btn btn-primary"
-                        >Опубликовать</button>
-                    </div>
+                            />
+                            <button
+                                type = "submit"
+                                className = "btn btn-primary"
+                            >Опубликовать</button>
+                        </div>}
                 </div>
             </form>
         </>
