@@ -22,7 +22,6 @@ const Comments = () => {
     };
     const handleSubmit = (data) => {
         API.comments.add({ ...data, pageId: userId }).then(comment => setComments([...comments, comment]));
-        // console.log(comments);
     };
     return (
         <>

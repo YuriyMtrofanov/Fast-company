@@ -42,7 +42,7 @@ const Comment = ({
                                 <div className="mb-4">
                                     <div className="d-flex justify-content-between align-items-center">
                                         <p className="mb-1 ">
-                                            {author && author.name}
+                                            {author && author.name}{" "}
                                             <span className="small">
                                                 {convertDate(createdAt)}
                                             </span>

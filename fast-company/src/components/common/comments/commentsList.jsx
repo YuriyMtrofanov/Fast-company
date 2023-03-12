@@ -13,8 +13,8 @@ const CommentsList = ({ data, onRemove }) => {
                     key = {comment._id}
                     id = {comment._id}
                     onRemove = {handleClick}
-                    createdAt = {String(comment.created_at)}
                     authorId = {comment.userId}
+                    createdAt = {comment.created_at}
                     content = {comment.content}
                 />
             ))}

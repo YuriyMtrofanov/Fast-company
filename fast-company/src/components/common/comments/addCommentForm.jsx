@@ -3,22 +3,15 @@ import PropTypes from "prop-types";
 import API from "../../../api";
 import SelectField from "../form/selectField";
 import TextAreaField from "../form/textAreaField";
+import { validator } from "../../../utils/validator";
 
 const AddCommentForm = ({ onSubmit }) => {
     const [data, setData] = useState({
         userId: "", // id пользователя
         content: "" // содержание комментария
     });
+
     const [users, setUsers] = useState({});
-
-    const handleChange = (target) => {
-        setData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
-        console.log(data);
-    };
-
     useEffect(() => {
         API.users.fetchAll().then((data) => {
             const usersList = Object.keys(data).map((userId) => ({
@@ -29,16 +22,47 @@ const AddCommentForm = ({ onSubmit }) => {
         });
     }, []);
 
+    const [errors, setErrors] = useState();
+    const validatorConfig = {
+        userId: {
+            isRequired: {
+                message: "Выберете пользователя"
+            }
+        },
+        content: {
+            isRequired: {
+                message: "Введите текст сообщения"
+            }
+        }
+    };
+    useEffect(() => {
+        validate();
+    }, [data]);
+    const validate = () => {
+        const errors = validator(data, validatorConfig);
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handleChange = (target) => {
+        setData((prevState) => ({
+            ...prevState,
+            [target.name]: target.value
+        }));
+    };
+
     const clearForm = () => {
         setData({
             userId: "",
             content: ""
         });
-        // setErrors({});
+        setErrors({});
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const isValid = validate();
+        if (!isValid) return;
         onSubmit(data);
         clearForm();
     };
@@ -62,9 +86,10 @@ const AddCommentForm = ({ onSubmit }) => {
                                 type = "text"
                                 id = "content"
                                 name = "content"
-                                value = {data.content}
                                 rows= "3"
                                 onChange = {handleChange}
+                                value = {data.content}
+                                error={errors.content}
                             />
                             <button
                                 type = "submit"

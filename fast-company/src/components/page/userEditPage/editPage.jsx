@@ -124,9 +124,13 @@ const EditUserPage = () => {
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
-    const isValid = Object.keys(errors).length === 0;
+    const isAbled = Object.keys(errors).length === 0;
     return (
         <div className="container mt-5">
+            <button className="btn btn-primary" onClick={() => history.goBack()}>
+                <i className="bi bi-caret-left"></i>
+                {" "}Назад
+            </button>
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
                     {!isLoading && Object.keys(professions).length > 0
@@ -174,7 +178,7 @@ const EditUserPage = () => {
                             />
                             <button
                                 type="submit"
-                                disabled={!isValid}
+                                disabled={!isAbled}
                                 className="btn btn-primary w-100 mx-auto"
                             >
                                 Обновить

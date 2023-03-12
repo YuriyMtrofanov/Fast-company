@@ -7,7 +7,6 @@ const TextAreaField = ({
     value,
     onChange,
     rows
-    // error
 }) => {
     const handleChange = ({ target }) => {
         onChange({ name: target.name, value: target.value });
