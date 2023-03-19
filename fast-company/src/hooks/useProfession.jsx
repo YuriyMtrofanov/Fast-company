@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import professionService from "../services/profession.service";
 import { toast } from "react-toastify";
-// import { toast } from "react-toastify";
-// import professionService from "../services/profession.service";
 
 const ProfessionContext = React.createContext();
 
@@ -21,7 +19,7 @@ export const ProfessionProvider = ({ children }) => {
         setError(message);
     };
 
-    async function getProfessions() {
+    async function getProfessionsList() {
         try {
             const { content } = await professionService.get();
             setProfessions(content);
@@ -31,9 +29,13 @@ export const ProfessionProvider = ({ children }) => {
         }
     };
 
+    function getProfession(id) { // Данный id = user.profession
+        return professions.find(profession => profession._id === id);
+    };
+
     useEffect(() => { // Вызаваем запрос данных по всем профессиям
-        getProfessions();
-        console.log("professions", professions);
+        getProfessionsList();
+        // console.log("professions", professions);
     }, []);
 
     useEffect(() => { // Отрабатываем ошибки приполучении записи в error
@@ -45,7 +47,7 @@ export const ProfessionProvider = ({ children }) => {
 
     return (
         <ProfessionContext.Provider
-            value = {{ professions, isLoading }}
+            value = {{ professions, isLoading, getProfession }}
         >
             {children}
         </ProfessionContext.Provider>

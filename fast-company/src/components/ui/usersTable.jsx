@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { BookMark } from "../common/bookmark";
 import QualitiesList from "./qualities/qualitiesList";
 import Table, { TableHeader, TableBody } from "../common/table";
+import Profession from "./profession";
 
 const UsersTable = ({
     users,
@@ -12,16 +13,28 @@ const UsersTable = ({
     onDelete
 }) => {
     const columns = {
-        name: { iter: "name", name: "Имя" },
+        name: {
+            iter: "name",
+            name: "Имя"
+        },
         qualities: {
             name: "Качества",
             component: (user) => (
                 <QualitiesList {...{ qualities: user.qualities }} />
             )
         },
-        profession: { iter: "profession.name", name: "Профессия" },
-        completedMeetings: { iter: "completedMeetings", name: "Встретился, раз" },
-        rate: { iter: "rate", name: "Оценка" },
+        profession: {
+            name: "Профессия",
+            component: (user) => <Profession id = {user.profession}/>
+        },
+        completedMeetings: {
+            iter: "completedMeetings",
+            name: "Встретился, раз"
+        },
+        rate: {
+            iter: "rate",
+            name: "Оценка"
+        },
         bookmark: {
             iter: "bookmark",
             name: "Избранное",
