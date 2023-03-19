@@ -8,20 +8,22 @@ import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
 import PropTypes from "prop-types";
 import TextField from "../../common/form/textField";
+import { useUser } from "../../../hooks/useUsers";
 
 const usersListPage = () => {
-    const [users, setUsers] = useState();
+    // const [users, setUsers] = useState();
+    const { users } = useUser();
     const [currentPage, setCurrentPage] = useState(1);
     const [professions, setProfessions] = useState();
     const [selectedProperty, setSelectedProperty] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
     const [inputData, setInputData] = useState("");
 
-    useEffect(() => {
-        api.users.fetchAll().then(data => {
-            setUsers(data);
-        });
-    }, []);
+    // useEffect(() => {
+    //     api.users.fetchAll().then(data => {
+    //         setUsers(data);
+    //     });
+    // }, []);
 
     const handleBoookMark = (userId) => {
         const usersBM = users.map((user) => {
@@ -30,14 +32,16 @@ const usersListPage = () => {
             }
             return user;
         });
-        setUsers(usersBM);
+        // setUsers(usersBM);
+        console.log(usersBM);
     };
 
     const handleDelete = (userId) => {
-        const currentUsers = users.filter(
-            (user) => user._id !== userId
-        );
-        setUsers(currentUsers);
+        // const currentUsers = users.filter(
+        //     (user) => user._id !== userId
+        // );
+        // setUsers(currentUsers);
+        console.log(userId);
     };
 
     useEffect(() => {
