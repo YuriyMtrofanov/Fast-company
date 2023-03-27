@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
-import api from "../../api";
+// import api from "../../api";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxField from "../common/form/checkBoxField";
+import { useQuality } from "../../hooks/useQuality";
+import { useProfession } from "../../hooks/useProfession";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -16,58 +18,25 @@ const RegisterForm = () => {
         qualities: [],
         licence: false
     });
-    const [qualities, setQualities] = useState([]);
-    const [professions, setProfession] = useState([]);
+
+    const { qualities } = useQuality();
+    // Перед тем как передать в MultiSelect данные их нужно преобразовать
+    const qualitiesList = qualities.map((quality) => ({
+        value: quality._id,
+        label: quality.name,
+        color: quality.color
+    }));
+
+    const { professions } = useProfession();
+    // у нас же преобразование данных было. Поэтому и тут я их преобразую
+    const professionsList = professions.map((profession) => ({
+        label: profession.name,
+        value: profession._id
+    }));
+
     const [errors, setErrors] = useState({});
 
-    // Данный метод позволяет получить объект профессии по её id. Это понадобится для
-    // обртного преобразования данных к исходному виду, который записан в user
-    // с ключами {_id: '', name: '', color: ''}
-    const getProfessionById = (id) => {
-        for (const prof of professions) {
-            if (prof.value === id) {
-                return { _id: prof.value, name: prof.label };
-            }
-        }
-    };
-
-    // Данный метод позволяет получить объект профессии по её id. Это понадобится для
-    // обртного преобразования данных к исходному виду, который записан в user
-    const getQualities = (elements) => {
-        const qualitiesArray = [];
-        for (const elem of elements) {
-            for (const quality in qualities) {
-                if (elem.value === qualities[quality].value) {
-                    qualitiesArray.push({
-                        _id: qualities[quality].value,
-                        name: qualities[quality].label,
-                        color: qualities[quality].color
-                    });
-                }
-            }
-        }
-        return qualitiesArray;
-    };
-
-    useEffect(() => {
-        api.professions.fetchAll().then((data) => {
-            const professionsList = Object.keys(data).map((professionName) => ({
-                label: data[professionName].name,
-                value: data[professionName]._id
-            }));
-            setProfession(professionsList);
-        });
-        api.qualities.fetchAll().then((data) => {
-            const qualitiesList = Object.keys(data).map((optionName) => ({
-                value: data[optionName]._id,
-                label: data[optionName].name,
-                color: data[optionName].color
-            }));
-            setQualities(qualitiesList);
-        });
-    }, []);
     const handleChange = (target) => {
-        // console.log("target", { [target.name]: target.value });
         setData((prevState) => ({
             ...prevState,
             [target.name]: target.value
@@ -124,13 +93,69 @@ const RegisterForm = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        const { profession, qualities } = data;
-        console.log({
+        // Т.к. qualities передаются в data в виде объекта {value: 'id', label: 'Троль'},
+        // а в FireBase нужно передавать массив из id [id, id, ...], преобразуем данные
+        // к такому виду:
+        const newData = {
             ...data,
-            profession: getProfessionById(profession),
-            qualities: getQualities(qualities)
-        });
+            qualities: data.qualities.map((quality) => {
+                return quality.value;
+            })
+        };
+        console.log(newData);
     };
+
+    // Старое решение с fake api
+    // Данный метод позволяет получить объект профессии по её id. Это понадобится для
+    // обртного преобразования данных к исходному виду, который записан в user
+    // с ключами {_id: '', name: '', color: ''}
+    // const getProfessionById = (id) => {
+    //     for (const prof of professions) {
+    //         if (prof.value === id) {
+    //             return { _id: prof.value, name: prof.label };
+    //         }
+    //     }
+    // };
+
+    // Данный метод позволяет получить объект профессии по её id. Это понадобится для
+    // обртного преобразования данных к исходному виду, который записан в user
+    // const getQualities = (elements) => {
+    //     const qualitiesArray = [];
+    //     for (const elem of elements) {
+    //         for (const quality in qualities) {
+    //             if (elem.value === qualities[quality].value) {
+    //                 qualitiesArray.push({
+    //                     _id: qualities[quality].value,
+    //                     name: qualities[quality].label,
+    //                     color: qualities[quality].color
+    //                 });
+    //             }
+    //         }
+    //     }
+    //     return qualitiesArray;
+    // };
+
+    // const [professions, setProfession] = useState([]);
+    // const [qualities, setQualities] = useState([]);
+    // useEffect(() => {
+    //     api.professions.fetchAll().then((data) => {
+    //         const professionsList = Object.keys(data).map((professionName) => ({
+    //             label: data[professionName].name,
+    //             value: data[professionName]._id
+    //         }));
+    //         console.log("api professions", professionsList);
+    //         setProfession(professionsList);
+    //     });
+    //     api.qualities.fetchAll().then((data) => {
+    //         const qualitiesList = Object.keys(data).map((optionName) => ({
+    //             value: data[optionName]._id,
+    //             label: data[optionName].name,
+    //             color: data[optionName].color
+    //         }));
+    //         setQualities(qualitiesList);
+    //     });
+    // }, []);
+
     return (
         <form onSubmit={handleSubmit}>
             <TextField
@@ -151,7 +176,7 @@ const RegisterForm = () => {
             <SelectField
                 label="Выбери свою профессию"
                 defaultOption="Выберите..."
-                options={professions} // Этот атрибут передает список опций (профессий)
+                options={professionsList} // Этот атрибут передает список опций (профессий)
                 name="profession"
                 onChange={handleChange}
                 value={data.profession} // Этот атрибут передает значение (профессии) выбранной по умолчанию
@@ -169,7 +194,7 @@ const RegisterForm = () => {
                 label="Выберите ваш пол"
             />
             <MultiSelectField
-                options={qualities}
+                options={qualitiesList}
                 onChange={handleChange}
                 defaultValue={data.qualities}
                 name="qualities"

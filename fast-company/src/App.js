@@ -8,25 +8,28 @@ import "bootstrap/dist/css/bootstrap.css";
 import Users from "./layouts/users";
 import { ProfessionProvider } from "./hooks/useProfession";
 import { QualityProvider } from "./hooks/useQuality";
+import AuthProvider from "./hooks/useAuth";
 // import Loading from "./components/ui/loading";
 
 export function App() {
     return (
         <div>
-            <NavBar />
-            <ProfessionProvider>
-                <QualityProvider>
-                    <Switch>
-                        <Route path = "/users/:userId?/:edit?" component={Users}/>
-                        <Route path = "/login/:type?" component={Login}/>
-                        <Route path = "/" exact component={Main}/>
-                        <Redirect to = "/"/>
-                        {/* <Route path = "/loading" component = {Loading}/>
-                        <Redirect to = "/loading"/>
-                        <Redirect from = "../users/" to = "/loading"/> */}
-                    </Switch>
-                </QualityProvider>
-            </ProfessionProvider>
+            <AuthProvider>
+                <NavBar />
+                <ProfessionProvider>
+                    <QualityProvider>
+                        <Switch>
+                            <Route path = "/users/:userId?/:edit?" component={Users}/>
+                            <Route path = "/login/:type?" component={Login}/>
+                            <Route path = "/" exact component={Main}/>
+                            <Redirect to = "/"/>
+                            {/* <Route path = "/loading" component = {Loading}/>
+                            <Redirect to = "/loading"/>
+                            <Redirect from = "../users/" to = "/loading"/> */}
+                        </Switch>
+                    </QualityProvider>
+                </ProfessionProvider>
+            </AuthProvider>
             <ToastContainer />
         </div>
     );
