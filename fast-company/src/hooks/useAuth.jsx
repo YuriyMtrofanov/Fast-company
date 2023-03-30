@@ -1,6 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import axios from "axios";
+import { toast } from "react-toastify";
+import userService from "../services/user.service";
+import { setTokens } from "../services/localStorage.service";
 
+const httpAuth = axios.create();
 const AuthContext = React.createContext();
 
 export const useAuth = () => {
@@ -8,8 +13,55 @@ export const useAuth = () => {
 };
 
 const AuthProvider = ({ children }) => {
+    const [currentUser, setCurrentUser] = useState({});
+    const [error, setError] = useState(null);
+
+    function errorCatcher(error) {
+        const { message } = error.response.data;
+        setError(message); // метод сохранения ключей из localStorage.service
+    };
+
+    async function signUp({ email, password, ...rest }) {
+        // const keyFirebasePrivate = "AIzaSyAwh-5xNiLcnlTQl7VwIfR08tnvf6K_PcU"; // [API_KEY]
+        // const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${keyFirebasePrivate}`;
+        const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_KEY}`;
+        try {
+            const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
+            setTokens(data);
+            await createUser({ _id: data.localId, email, ...rest });
+            // console.log(data);
+        } catch (error) {
+            errorCatcher(error);
+            const { code, message } = error.response.data.error;
+            // console.log("code: ", code, "message: ", message);
+            if (code === 400) {
+                if (message === "EMAIL_EXISTS") {
+                    const errorObject = { email: "Пользователь с таким Email уже существует" };
+                    throw errorObject;
+                }
+            }
+            // throw new Error;
+        }
+    };
+
+    async function createUser(data) {
+        try {
+            const { content } = userService.create(data);
+            setCurrentUser(content);
+        } catch (error) {
+            errorCatcher(error);
+        }
+    };
+
+    useEffect(() => {
+        if (error !== null) {
+            toast.error(error);
+            setError(null);
+        }
+    }, [error]);
+
     return (
-        <AuthContext.Provider value="">
+        <AuthContext.Provider value={{ signUp, currentUser }}>
             {children}
         </AuthContext.Provider>
     );

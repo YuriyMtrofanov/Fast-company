@@ -8,6 +8,8 @@ import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxField from "../common/form/checkBoxField";
 import { useQuality } from "../../hooks/useQuality";
 import { useProfession } from "../../hooks/useProfession";
+import { useAuth } from "../../hooks/useAuth";
+import { useHistory } from "react-router-dom";
 
 const RegisterForm = () => {
     const [data, setData] = useState({
@@ -35,6 +37,8 @@ const RegisterForm = () => {
     }));
 
     const [errors, setErrors] = useState({});
+    const history = useHistory();
+    const { signUp } = useAuth();
 
     const handleChange = (target) => {
         setData((prevState) => ({
@@ -89,7 +93,7 @@ const RegisterForm = () => {
     };
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
@@ -102,7 +106,16 @@ const RegisterForm = () => {
                 return quality.value;
             })
         };
-        console.log(newData);
+        // console.log(newData);
+        try {
+            await signUp(newData);
+            history.push("/");
+        } catch (error) {
+            // так как error = {название поля: "описание ошибки"}
+            // console.log(error) => { email: "Пользователь с таким email уже существует" }
+            // то мы просто задаем новое состояние ошибки
+            setErrors(error);
+        }
     };
 
     // Старое решение с fake api

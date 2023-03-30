@@ -5,6 +5,7 @@ import CheckBoxField from "../common/form/checkBoxField";
 // import * as yup from "yup"; // yup можно удалить командой "npm uninstall yup"
 
 const LoginForm = () => {
+    // console.log(process.env);
     const [inputData, setInputData] = useState({ email: "", password: "", stayOn: false }); // Задаем состояние для всей формы сразу (Информация, вводимая в полях ввода).
 
     const handleChange = (target) => {

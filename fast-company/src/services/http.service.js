@@ -1,10 +1,16 @@
 import axios from "axios";
-// import { toast } from "react-toastify"; // Импортируем метод для отображения ошибок для пользователя
 import configFile from "../config.json";
+
 // Зададим базовый роут ссылки на сервер (http://localhost:4000/api/v1/),
 // Т.о. мы можем при вызове URL вообще не указывать знвчение этой ссылки.
 // Она как бы подтягивается по умолчанию.
-axios.defaults.baseURL = configFile.apiEndpoint;
+// axios.defaults.baseURL = configFile.apiEndpoint;
+// Теперь на основе данного выражения создадим экземпляр данного выражения т.н. инстанс
+// Делаем мы это для того чтобы создать несколько разных конфигураций. Например где-то нам
+// нужно чтобы в ссылку в запросе добавлялся .json, а где-то нет.
+const http = axios.create({
+    baseURL: configFile.apiEndpoint
+});
 
 // Для обработки неожидаемых ошибок используем метод "interceptors" (перехватчи)
 // Данный метод может перехватывать как request (запрос), так и response (ответ от сервера)
@@ -28,7 +34,6 @@ axios.defaults.baseURL = configFile.apiEndpoint;
         return Promise.reject(error);
     }
 ); */
-
 // Так как от fireBase мы получаем данные в виде объекта, но нам нужен массив, то требуется
 // преобразовать данные с помощью функции:
 function transformData(data) {
@@ -37,23 +42,21 @@ function transformData(data) {
         : [];
 };
 // Далее при обоработке ответа мы вызываем transformData() и получаем массив с данными
-axios.interceptors.response.use(
+http.interceptors.response.use(
     (response) => {
         response.data = { content: transformData(response.data) };
-        // console.log("response.data.content", response.data);
         return response;
     }
 );
 
-axios.interceptors.request.use(
+http.interceptors.request.use(
     function (config) {
         if (configFile.isFireBase) {
+            // Проверяем наличие "/". В случае его наличия удаляем и добавляем в конце
+            // к ссылке суффикс ".json".
             const isContainsSlash = /\/$/gi.test(config.url);
-            config.url = (
-                isContainsSlash
-                    ? config.url.slice(0, -1)
-                    : config.url) + ".json";
-            // console.log("config.url", config.url); // quality.json или profession.json
+            config.url =
+                (isContainsSlash ? config.url.slice(0, -1) : config.url) + ".json";
         }
         return config;
     },
@@ -63,10 +66,10 @@ axios.interceptors.request.use(
 );
 
 const httpService = {
-    get: axios.get,
-    put: axios.put,
-    post: axios.post,
-    delete: axios.delete
+    get: http.get,
+    put: http.put,
+    post: http.post,
+    delete: http.delete
 };
 
 export default httpService;
