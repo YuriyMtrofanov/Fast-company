@@ -118,57 +118,6 @@ const RegisterForm = () => {
         }
     };
 
-    // Старое решение с fake api
-    // Данный метод позволяет получить объект профессии по её id. Это понадобится для
-    // обртного преобразования данных к исходному виду, который записан в user
-    // с ключами {_id: '', name: '', color: ''}
-    // const getProfessionById = (id) => {
-    //     for (const prof of professions) {
-    //         if (prof.value === id) {
-    //             return { _id: prof.value, name: prof.label };
-    //         }
-    //     }
-    // };
-
-    // Данный метод позволяет получить объект профессии по её id. Это понадобится для
-    // обртного преобразования данных к исходному виду, который записан в user
-    // const getQualities = (elements) => {
-    //     const qualitiesArray = [];
-    //     for (const elem of elements) {
-    //         for (const quality in qualities) {
-    //             if (elem.value === qualities[quality].value) {
-    //                 qualitiesArray.push({
-    //                     _id: qualities[quality].value,
-    //                     name: qualities[quality].label,
-    //                     color: qualities[quality].color
-    //                 });
-    //             }
-    //         }
-    //     }
-    //     return qualitiesArray;
-    // };
-
-    // const [professions, setProfession] = useState([]);
-    // const [qualities, setQualities] = useState([]);
-    // useEffect(() => {
-    //     api.professions.fetchAll().then((data) => {
-    //         const professionsList = Object.keys(data).map((professionName) => ({
-    //             label: data[professionName].name,
-    //             value: data[professionName]._id
-    //         }));
-    //         console.log("api professions", professionsList);
-    //         setProfession(professionsList);
-    //     });
-    //     api.qualities.fetchAll().then((data) => {
-    //         const qualitiesList = Object.keys(data).map((optionName) => ({
-    //             value: data[optionName]._id,
-    //             label: data[optionName].name,
-    //             color: data[optionName].color
-    //         }));
-    //         setQualities(qualitiesList);
-    //     });
-    // }, []);
-
     return (
         <form onSubmit={handleSubmit}>
             <TextField
@@ -189,10 +138,10 @@ const RegisterForm = () => {
             <SelectField
                 label="Выбери свою профессию"
                 defaultOption="Выберите..."
-                options={professionsList} // Этот атрибут передает список опций (профессий)
+                options={professionsList}
                 name="profession"
                 onChange={handleChange}
-                value={data.profession} // Этот атрибут передает значение (профессии) выбранной по умолчанию
+                value={data.profession}
                 error={errors.profession}
             />
             <RadioField

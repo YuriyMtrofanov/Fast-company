@@ -18,12 +18,10 @@ const AuthProvider = ({ children }) => {
 
     function errorCatcher(error) {
         const { message } = error.response.data;
-        setError(message); // метод сохранения ключей из localStorage.service
+        setError(message);
     };
 
     async function signUp({ email, password, ...rest }) {
-        // const keyFirebasePrivate = "AIzaSyAwh-5xNiLcnlTQl7VwIfR08tnvf6K_PcU"; // [API_KEY]
-        // const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${keyFirebasePrivate}`;
         const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_KEY}`;
         try {
             const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
@@ -38,7 +36,6 @@ const AuthProvider = ({ children }) => {
                     throw errorObject;
                 }
             }
-            // throw new Error;
         }
     };
 
@@ -70,12 +67,12 @@ const AuthProvider = ({ children }) => {
                     throw errorObject;
                 }
             }
-            // throw new Error;
         }
     };
 
     async function findUser(data) {
         try {
+            // Данный метод возвращает корректные данные если удалить transformData(response.data) из http.service
             // const { content } = await userService.getUser(data);
             // console.log("user", content);
         } catch (error) {
