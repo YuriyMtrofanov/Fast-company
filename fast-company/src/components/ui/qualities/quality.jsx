@@ -9,11 +9,6 @@ const Qualitie = ({ name, color }) => {
     };
 
     return <span className={getQualityClasses()}>{name}</span>;
-    // return (
-    //     <span className={"badge m-1 bg-" + color}>
-    //         {name}
-    //     </span>
-    // );
 };
 
 Qualitie.propTypes = {
