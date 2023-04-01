@@ -105,7 +105,7 @@ const LoginForm = () => {
         event.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log(inputData); // т.о. если валидация не увенчалась успехом, то console.log блокируется и информация не выводится в консоль
+        // console.log("request data", inputData); // т.о. если валидация не увенчалась успехом, то console.log блокируется и информация не выводится в консоль
         try {
             await signIn(inputData);
         } catch (error) {

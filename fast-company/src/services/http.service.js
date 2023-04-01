@@ -40,7 +40,9 @@ function transformData(data) {
     return data
         ? Object.keys(data).map(key => ({ ...data[key] }))
         : [];
+    // return data;
 };
+
 // Далее при обоработке ответа мы вызываем transformData() и получаем массив с данными
 http.interceptors.response.use(
     (response) => {

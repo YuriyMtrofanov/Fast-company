@@ -29,11 +29,9 @@ const AuthProvider = ({ children }) => {
             const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
             setTokens(data);
             await createUser({ _id: data.localId, email, ...rest });
-            // console.log(data);
         } catch (error) {
             errorCatcher(error);
             const { code, message } = error.response.data.error;
-            // console.log("code: ", code, "message: ", message);
             if (code === 400) {
                 if (message === "EMAIL_EXISTS") {
                     const errorObject = { email: "Пользователь с таким Email уже существует" };
@@ -44,20 +42,25 @@ const AuthProvider = ({ children }) => {
         }
     };
 
+    async function createUser(data) {
+        try {
+            const { content } = userService.create(data);
+            setCurrentUser(content);
+        } catch (error) {
+            errorCatcher(error);
+        }
+    };
+
     async function signIn({ email, password, ...rest }) {
         const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_KEY}`;
         try {
             const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
             setTokens(data);
-            // Нужно создать функцию поиска юзера
-            // await findUser({ _id: data.localId, email, ...rest });
-            // на подобие такой функции
-            // await createUser({ _id: data.localId, email, ...rest });
-            console.log(data); // посмотреть, что передается в data
+            console.log(data); // Ответ с данными от сервера получаем
+            findUser({ _id: data.localId }); // Но данный мемод возвращает некорректные данные т.к. в http.service мы трансхормируем данные
         } catch (error) {
             errorCatcher(error);
             const { code, message } = error.response.data.error;
-            console.log("code: ", code, "message: ", message);
             if (code === 400) {
                 if (message === "EMAIL_NOT_FOUND") {
                     const errorObject = { email: "Пользователся с данным Email не существует" };
@@ -71,10 +74,10 @@ const AuthProvider = ({ children }) => {
         }
     };
 
-    async function createUser(data) {
+    async function findUser(data) {
         try {
-            const { content } = userService.create(data);
-            setCurrentUser(content);
+            // const { content } = await userService.getUser(data);
+            // console.log("user", content);
         } catch (error) {
             errorCatcher(error);
         }
