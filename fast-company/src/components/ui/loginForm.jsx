@@ -3,13 +3,14 @@ import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
 import CheckBoxField from "../common/form/checkBoxField";
 import { useAuth } from "../../hooks/useAuth";
+import { useHistory } from "react-router-dom";
 // import * as yup from "yup"; // yup можно удалить командой "npm uninstall yup"
 
 const LoginForm = () => {
     // console.log(process.env);
     const [inputData, setInputData] = useState({ email: "", password: "", stayOn: false }); // Задаем состояние для всей формы сразу (Информация, вводимая в полях ввода).
     const { signIn } = useAuth();
-
+    const history = useHistory();
     const handleChange = (target) => {
         // console.log("target: ", target); // здесь мы получим undefined так как в этом компоненте мы получаем данные асинхронно
         // Поэтому мы получаем данные асинхронно в дочернем компоненте, возвращаем их в родительский с помощью "handleChange()" и
@@ -108,6 +109,7 @@ const LoginForm = () => {
         // console.log("request data", inputData); // т.о. если валидация не увенчалась успехом, то console.log блокируется и информация не выводится в консоль
         try {
             await signIn(inputData);
+            history.push("/");
         } catch (error) {
             setErrors(error);
         }

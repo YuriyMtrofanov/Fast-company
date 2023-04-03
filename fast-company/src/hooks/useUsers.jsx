@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import userService from "../services/user.service";
 import { toast } from "react-toastify";
-// import httpService from "../services/http.service";
-// import axios from "axios";
 
 const UserContext = React.createContext();
 

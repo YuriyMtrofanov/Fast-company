@@ -1,21 +1,18 @@
 import httpService from "./http.service";
+import localStorageService from "./localStorage.service";
 
 const userEndpoint = "user/";
 const userService = {
     get: async () => {
         const { data } = await httpService.get(userEndpoint);
-        // console.log("httpService.put", data);
         return data;
     },
     create: async (payload) => {
         const { data } = await httpService.put(userEndpoint + payload._id, payload);
-        // console.log("httpService.put", data);
         return data;
     },
-    getUser: async (payload) => {
-        const { data } = await httpService.get(userEndpoint + payload._id);
-        // console.log("httpService.get", data);
-        // console.log("httpService.get", userEndpoint + payload._id);
+    getCurrentUser: async () => { // в данном случае при авторизации юзера мы сначала помещаем его ключи и localId в localStorage. От туде потом его и считываем
+        const { data } = await httpService.get(userEndpoint + localStorageService.getUserId());
         return data;
     }
     // delete: async (id) => {

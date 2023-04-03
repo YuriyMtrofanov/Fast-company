@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { validator } from "../../utils/validator";
 import TextField from "../common/form/textField";
-// import api from "../../api";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
@@ -15,6 +14,7 @@ const RegisterForm = () => {
     const [data, setData] = useState({
         email: "",
         password: "",
+        name: "",
         profession: "",
         sex: "male",
         qualities: [],
@@ -53,6 +53,15 @@ const RegisterForm = () => {
             },
             isEmail: {
                 message: "Email введен некорректно"
+            }
+        },
+        name: {
+            isRequired: {
+                message: "Имя обязательно для заполнения"
+            },
+            min: {
+                message: "Имя должно состоять минимум из 4 символов",
+                value: 4
             }
         },
         password: {
@@ -186,13 +195,21 @@ const RegisterForm = () => {
                 onChange={handleChange}
                 error={errors.password}
             />
+            <TextField
+                label="Имя"
+                type="name"
+                name="name"
+                value={data.name}
+                onChange={handleChange}
+                error={errors.name}
+            />
             <SelectField
                 label="Выбери свою профессию"
                 defaultOption="Выберите..."
-                options={professionsList} // Этот атрибут передает список опций (профессий)
+                options={professionsList}
                 name="profession"
                 onChange={handleChange}
-                value={data.profession} // Этот атрибут передает значение (профессии) выбранной по умолчанию
+                value={data.profession}
                 error={errors.profession}
             />
             <RadioField

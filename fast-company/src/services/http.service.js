@@ -1,5 +1,7 @@
 import axios from "axios";
 import configFile from "../config.json";
+import { httpAuth } from "../hooks/useAuth";
+import localStorageService from "./localStorage.service";
 
 // Зададим базовый роут ссылки на сервер (http://localhost:4000/api/v1/),
 // Т.о. мы можем при вызове URL вообще не указывать знвчение этой ссылки.
@@ -37,9 +39,9 @@ const http = axios.create({
 // Так как от fireBase мы получаем данные в виде объекта, но нам нужен массив, то требуется
 // преобразовать данные с помощью функции:
 function transformData(data) {
-    return data
+    return data && !data._id
         ? Object.keys(data).map(key => ({ ...data[key] }))
-        : [];
+        : data;
     // return data;
 };
 
@@ -52,13 +54,29 @@ http.interceptors.response.use(
 );
 
 http.interceptors.request.use(
-    function (config) {
+    async function (config) {
         if (configFile.isFireBase) {
             // Проверяем наличие "/". В случае его наличия удаляем и добавляем в конце
             // к ссылке суффикс ".json".
             const isContainsSlash = /\/$/gi.test(config.url);
             config.url =
                 (isContainsSlash ? config.url.slice(0, -1) : config.url) + ".json";
+            const expiresDate = localStorageService.getExpiresDateToken(); // запросим дату, когда истекает срок годности нашего idToken-а (Acces Token)
+            const refreshToken = localStorageService.getRefreshToken(); // и refreshToken для обновления idToken-а (Acces Token)
+            const url = `https://securetoken.googleapis.com/v1/token?key=${process.env.REACT_APP_FIREBASE_KEY}`;
+            if (refreshToken && expiresDate > Date.now()) { // проверим существует ли refreshToken и не истек ли срок Acces Token-а
+                const { data } = await httpAuth.post(url, { // импортируем httpAuth из useAuth
+                    grant_type: "refresh_token",
+                    refresh_token: refreshToken
+                });
+                // console.log("data", data);
+                localStorageService.setTokens({
+                    idToken: data.access_token,
+                    expiresIn: data.expires_in,
+                    refreshToken: data.refresh_token,
+                    localId: data.user_id
+                });
+            }
         }
         return config;
     },
