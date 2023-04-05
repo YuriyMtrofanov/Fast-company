@@ -9,6 +9,7 @@ import Users from "./layouts/users";
 import { ProfessionProvider } from "./hooks/useProfession";
 import { QualityProvider } from "./hooks/useQuality";
 import AuthProvider from "./hooks/useAuth";
+import ProtectedRoute from "./components/common/protectedRoute";
 // import Loading from "./components/ui/loading";
 
 export function App() {
@@ -19,7 +20,7 @@ export function App() {
                 <ProfessionProvider>
                     <QualityProvider>
                         <Switch>
-                            <Route path = "/users/:userId?/:edit?" component={Users}/>
+                            <ProtectedRoute path = "/users/:userId?/:edit?" component={Users}/>
                             <Route path = "/login/:type?" component={Login}/>
                             <Route path = "/" exact component={Main}/>
                             <Redirect to = "/"/>

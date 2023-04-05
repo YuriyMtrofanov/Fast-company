@@ -77,6 +77,10 @@ http.interceptors.request.use(
                     localId: data.user_id
                 });
             }
+            const accesToken = localStorageService.getAccesToken(); // получаем наш idToken-а (Acces Token)
+            if (accesToken) {
+                config.params = { ...config.params, auth: accesToken }; // сохраняем прежние данные "...config.params" и добавляем новые "auth: accesToken"
+            }
         }
         return config;
     },

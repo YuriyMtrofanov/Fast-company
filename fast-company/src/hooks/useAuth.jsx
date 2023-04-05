@@ -21,8 +21,9 @@ export const useAuth = () => {
 };
 
 const AuthProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState({});
+    const [currentUser, setCurrentUser] = useState();
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     function errorCatcher(error) {
         const { message } = error.response.data;
@@ -53,7 +54,7 @@ const AuthProvider = ({ children }) => {
                     throw errorObject;
                 }
             }
-            // throw new Error;
+            // мы моментально получаем данные о пользователе, поэтому контролировать isLoading не нужно
         }
     };
 
@@ -62,7 +63,7 @@ const AuthProvider = ({ children }) => {
         try {
             const { data } = await httpAuth.post(url, { email, password, returnSecureToken: true });
             setTokens(data);
-            getUserData();
+            await getUserData();
             // console.log(data); // Ответ с данными от сервера получаем
         } catch (error) {
             errorCatcher(error);
@@ -76,13 +77,19 @@ const AuthProvider = ({ children }) => {
                     throw errorObject;
                 }
             }
-            // throw new Error;
+            // а здесь получаем данные асинхронно, поэтому нужно получать isLoading до момента получения данных;
+        } finally {
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
         if (localStorageService.getAccesToken()) {
             getUserData();
+        } else {
+            // но пока мы ждем получения данных авторизации или их нет (неавторизованный пользователь)
+            // нужно отобразить данные для неавторизованного пользователя
+            setIsLoading(false);
         }
     }, []);
 
@@ -115,7 +122,10 @@ const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ signUp, signIn, currentUser }}>
-            {children}
+            {!isLoading
+                ? children
+                : "loading..."
+            }
         </AuthContext.Provider>
     );
 };
