@@ -28,6 +28,10 @@ const UserProvider = ({ children }) => {
         }
     };
 
+    function getUserbyId(userId) { // Функция-запрос данных с сервера по всем юзерам
+        return users.find((user) => user._id === userId);
+    };
+
     useEffect(() => { // Вызаваем запрос данных по всем юзерам
         getUsers();
     }, []);
@@ -41,7 +45,7 @@ const UserProvider = ({ children }) => {
 
     return (
         <UserContext.Provider
-            value = {{ users }}
+            value = {{ users, getUserbyId }}
         >
             {!isLoading
                 ? children

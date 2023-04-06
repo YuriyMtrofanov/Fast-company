@@ -32,12 +32,20 @@ export function getUserId() { // метод получения id пользов
     return localStorage.getItem(USER_ID_KEY);
 };
 
+export function removeAuthData() { // метод удаления текущего юзера из localStorage (logout)
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(REFRESH_KEY);
+    localStorage.removeItem(EXPIRES_KEY);
+    localStorage.removeItem(USER_ID_KEY);
+};
+
 const localStorageService = {
     setTokens,
     getAccesToken,
     getRefreshToken,
     getExpiresDateToken,
-    getUserId
+    getUserId,
+    removeAuthData
 };
 
 export default localStorageService;

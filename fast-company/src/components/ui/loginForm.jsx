@@ -11,8 +11,7 @@ const LoginForm = () => {
     const [inputData, setInputData] = useState({ email: "", password: "", stayOn: false }); // Задаем состояние для всей формы сразу (Информация, вводимая в полях ввода).
     const { signIn } = useAuth();
     const history = useHistory();
-    console.log("history", history);
-    console.log("location", history.location.state.from.pathname);
+    // console.log("location", history.location.state.from.pathname);
     const handleChange = (target) => {
         // console.log("target: ", target); // здесь мы получим undefined так как в этом компоненте мы получаем данные асинхронно
         // Поэтому мы получаем данные асинхронно в дочернем компоненте, возвращаем их в родительский с помощью "handleChange()" и
@@ -111,7 +110,8 @@ const LoginForm = () => {
         // console.log("request data", inputData); // т.о. если валидация не увенчалась успехом, то console.log блокируется и информация не выводится в консоль
         try {
             await signIn(inputData);
-            history.push(history.location.state.from.pathname
+            // history.push("/");
+            history.push(history.location.state
                 ? history.location.state.from.pathname
                 : "/");
         } catch (error) {

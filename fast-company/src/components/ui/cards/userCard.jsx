@@ -1,8 +1,10 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
+import { useAuth } from "../../../hooks/useAuth";
 
-const UserCard = ({ data }) => {
+const userCard = ({ user }) => {
+    const { currentUser } = useAuth();
     const history = useHistory();
     const handleClick = () => {
         history.push(history.location.pathname + "/edit");
@@ -10,31 +12,28 @@ const UserCard = ({ data }) => {
     return (
         <div className="card mb-3">
             <div className="card-body">
-                <button
-                    className="position-absolute top-0 end-0 btn btn-light btn-sm"
-                    onClick = {handleClick}
-                >
-                    <i className="bi bi-gear"></i>
-                </button>
+                {currentUser._id === user._id &&
+                    <button
+                        className="position-absolute top-0 end-0 btn btn-light btn-sm"
+                        onClick = {handleClick}
+                    >
+                        <i className="bi bi-gear"></i>
+                    </button>}
                 <div className="d-flex flex-column align-items-center text-center position-relative">
                     <img
-                        src={`https://avatars.dicebear.com/api/avataaars/${(
-                            Math.random() + 1
-                        )
-                            .toString(36)
-                            .substring(7)}.svg`}
+                        src={user.image}
                         className="rounded-circle shadow-1-strong me-3"
                         alt="avatar"
                         width="200"
                         height="200"
                     />
                     <div className="mt-3">
-                        <h4>{data.name}</h4>
-                        <p className="text-secondary mb-1">{data.profession.name}</p>
+                        <h4>{user.name}</h4>
+                        <p className="text-secondary mb-1">{user.profession.name}</p>
                         <div className="text-muted">
                             <i className="bi bi-caret-down-fill text-primary" role="button"></i>
                             <i className="bi bi-caret-up text-secondary" role="button"></i>
-                            <span className="ms-2">{data.rate}</span>
+                            <span className="ms-2">{user.rate}</span>
                         </div>
                     </div>
                 </div>
@@ -43,8 +42,8 @@ const UserCard = ({ data }) => {
     );
 };
 
-UserCard.propTypes = {
-    data: PropTypes.object.isRequired
+userCard.propTypes = {
+    user: PropTypes.object.isRequired
 };
 
-export default UserCard;
+export default userCard;

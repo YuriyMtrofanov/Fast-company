@@ -14,16 +14,14 @@ const NavProfile = () => {
                 <div className="me-2">
                     {currentUser.name}
                     <img
-                        src={`https://avatars.dicebear.com/api/avataaars/${(
-                            Math.random() + 1).toString(36).substring(7)}.svg`
-                        }
+                        src={currentUser.image}
                         alt=""
                         height="40"
                         className="img-responsive rounded-circle"
                     />
                     <div className = {"w-100 dropdown-menu" + (isOpen ? " show" : "")}>
                         <Link to = {`/users/${currentUser._id}`} className="dropdown-item" >Profile</Link>
-                        <Link to = "logout" className="dropdown-item">Logout</Link>
+                        <Link to = "/logout" className="dropdown-item">Logout</Link>
                     </div>
                 </div>
             </div>
