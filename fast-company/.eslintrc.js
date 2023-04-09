@@ -27,7 +27,14 @@ module.exports = {
 
         // Ошибка: Strings must use singlequote
         // Строковые значения оформляются одинарными кавычками
-        quotes: ["error", "double", { allowTemplateLiterals: true }],
+        quotes: [
+            "error",
+            "double",
+            {
+                allowTemplateLiterals: true,
+                avoidEscape: true
+            }
+        ],
 
         // "multiline-ternary": ["off"] // Отключение переноса строк в тернарных выражениях
     }
