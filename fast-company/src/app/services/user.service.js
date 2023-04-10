@@ -15,17 +15,17 @@ const userService = {
         );
         return data;
     },
-    update: async (payload) => {
-        const { data } = await httpService.put(
-            userEndpoint + payload._id, payload
-        );
-        return data;
-        // return userEndpoint + payload._id;
-    },
     getCurrentUser: async () => {
         const { data } = await httpService.get(
             userEndpoint + localStorageService.getUserId()
         );
+        return data;
+    },
+    update: async (payload) => {
+        // const { data } = await httpService.put(
+        //     userEndpoint + payload._id, payload
+        // );
+        const { data } = await httpService.patch(userEndpoint + localStorageService.getUserId(), payload);
         return data;
     }
 };

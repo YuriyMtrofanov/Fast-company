@@ -109,7 +109,6 @@ const AuthProvider = ({ children }) => {
     async function editUserInfo(data) {
         try {
             const { content } = await userService.update(data);
-            console.log("responsed data", content);
             setUser(content);
         } catch (error) {
             errorCatcher(error);

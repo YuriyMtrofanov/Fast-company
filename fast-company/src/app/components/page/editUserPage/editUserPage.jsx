@@ -13,27 +13,57 @@ import { useAuth } from "../../../hooks/useAuth";
 
 const EditUserPage = () => {
     const { currentUser, editUserInfo } = useAuth();
-    const [data, setData] = useState({
-        name: currentUser.name,
-        email: currentUser.email,
-        profession: "",
-        sex: "male",
-        qualities: []
-    });
-    const { professions } = useProfessions();
+    const [data, setData] = useState();
+    const { professions, isLoading: professionsLoading } = useProfessions();
     const professionsList = professions.map((p) => ({
         label: p.name,
         value: p._id
     }));
-    const { qualities } = useQualities();
+    const { qualities, isLoading: qualitiesLoading } = useQualities();
     const qualitiesList = qualities.map((q) => ({
         label: q.name,
         value: q._id,
         color: q.color
     }));
     const [errors, setErrors] = useState({});
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const history = useHistory();
+
+    const getQualitiesById = (qualitiesIds) => {
+        const qualitiesArray = [];
+        for (const qualId of qualitiesIds) {
+            for (const quality of qualities) {
+                if (quality._id === qualId) {
+                    qualitiesArray.push(quality);
+                    break;
+                }
+            }
+        }
+        return qualitiesArray;
+    };
+
+    function transformData(data) {
+        return getQualitiesById(data).map((q) => ({
+            label: q.name,
+            value: q._id,
+            color: q.color
+        }));
+    };
+
+    useEffect(() => {
+        if (currentUser && !professionsLoading && !qualitiesLoading && !data) {
+            setData({
+                ...currentUser,
+                qualities: transformData(currentUser.qualities)
+            });
+        }
+    }, [currentUser, professionsLoading, qualitiesLoading, data]);
+
+    useEffect(() => {
+        if (data && isLoading) {
+            setIsLoading(false);
+        }
+    }, [data]);
 
     const validatorConfig = {
         email: {
@@ -89,10 +119,10 @@ const EditUserPage = () => {
         };
         try {
             await editUserInfo(newData);
-            history.push(`/users/${currentUser._id}`);
         } catch (error) {
             setErrors(error);
         } finally {
+            history.push(`/users/${currentUser._id}`);
             setIsLoading(false);
         }
     };

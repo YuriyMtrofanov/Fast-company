@@ -8,7 +8,6 @@ function ProtectedRoute({ component: Component, children, ...rest }) {
         <Route
             {...rest}
             render={(props) => {
-                console.log("Route props", props);
                 if (!currentUser) {
                     return (
                         <Redirect
