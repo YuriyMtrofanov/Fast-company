@@ -95,7 +95,7 @@ const usersListPage = () => {
         if (inputData) {
             filteredUsers = data.filter(user => user.name.toLowerCase().includes(inputData.toLowerCase()));
         } else if (selectedProperty) {
-            filteredUsers = data.filter(user => user.profession === selectedProperty);
+            filteredUsers = data.filter(user => user.profession === selectedProperty._id);
         };
         return filteredUsers.filter((user) => user._id !== currentUser._id); // Данный фильтр позволяет не отображать залогененного юзера в общем списке юзеров
     };
