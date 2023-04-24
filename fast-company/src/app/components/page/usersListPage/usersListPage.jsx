@@ -8,27 +8,21 @@ import Pagination from "../../common/pagination";
 import PropTypes from "prop-types";
 import TextField from "../../common/form/textField";
 import { useUser } from "../../../hooks/useUsers";
-import { useProfessions } from "../../../hooks/useProfession";
+// import { useProfessions } from "../../../hooks/useProfession";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getProfessions, getProfessionsLoadStatus } from "../../../store/professions";
 
 const usersListPage = () => {
     // const [users, setUsers] = useState();
     const { users } = useUser();
     const { currentUser } = useAuth();
     const [currentPage, setCurrentPage] = useState(1);
-    const { professions, isLoading: professionsIsLoading } = useProfessions();
+    const professions = useSelector(getProfessions());
+    const professionsIsLoading = useSelector(getProfessionsLoadStatus());
     const [selectedProperty, setSelectedProperty] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
     const [inputData, setInputData] = useState("");
-
-    // useEffect(() => {
-    //     api.users.fetchAll().then(data => {
-    //         setUsers(data);
-    //     });
-    // }, []);
-    // useEffect(() => {
-    //     console.log("inputData", inputData);
-    // }, []);
 
     const handleBoookMark = (userId) => {
         const usersBM = users.map((user) => {
@@ -37,24 +31,12 @@ const usersListPage = () => {
             }
             return user;
         });
-        // setUsers(usersBM);
         console.log(usersBM);
     };
 
     const handleDelete = (userId) => {
-        // const currentUsers = users.filter(
-        //     (user) => user._id !== userId
-        // );
-        // setUsers(currentUsers);
         console.log(userId);
     };
-    // import api from "../../../api";
-    // const [professions, setProfessions] = useState();
-    // useEffect(() => {
-    //     api.professions.fetchAll().then(data =>
-    //         setProfessions(data)
-    //     );
-    // }, []);
 
     useEffect(() => {
         setCurrentPage(1);
