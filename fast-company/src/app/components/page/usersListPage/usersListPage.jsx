@@ -124,9 +124,9 @@ const usersListPage = () => {
                 </div>)
             }
             <div className="d-flex flex-column">
-                <h1>
+                <div>
                     <SearchStatus length = { count } />
-                </h1>
+                </div>
                 <form onSubmit = { handleSubmit }>
                     <TextField
                         type = "text"

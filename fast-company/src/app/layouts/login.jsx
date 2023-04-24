@@ -18,8 +18,8 @@ const Login = () => {
         <div className="container mt-5">
             <div className="row">
                 <div className="col-md-6 offset-md-3 shadow p-4">
-                    {formType === "register" ? (
-                        <>
+                    {formType === "register"
+                        ? (<>
                             <h3 className="mb-4">Register</h3>
                             <RegisterForm />
                             <p>
@@ -29,9 +29,8 @@ const Login = () => {
                                     Sign In
                                 </a>
                             </p>
-                        </>
-                    ) : (
-                        <>
+                        </>)
+                        : (<>
                             <h3 className="mb-4">Login</h3>
                             <LoginForm />
                             <p>
@@ -42,7 +41,7 @@ const Login = () => {
                                 </a>
                             </p>
                         </>
-                    )}
+                        )}
                 </div>
             </div>
         </div>

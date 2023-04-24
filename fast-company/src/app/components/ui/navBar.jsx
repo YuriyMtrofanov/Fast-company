@@ -26,17 +26,16 @@ const NavBar = () => {
                     )}
                 </ul>
                 <div className="d-flex">
-                    {currentUser ? (
-                        <NavProfile />
-                    ) : (
-                        <Link
+                    {currentUser
+                        ? (<NavProfile />)
+                        : (<Link
                             className="nav-link "
                             aria-current="page"
                             to="/login"
                         >
                             Login
-                        </Link>
-                    )}
+                        </Link>)
+                    }
                 </div>
             </div>
         </nav>
