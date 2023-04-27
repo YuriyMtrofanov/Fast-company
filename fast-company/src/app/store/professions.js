@@ -1,4 +1,3 @@
-
 import { createSlice } from "@reduxjs/toolkit";
 import professionService from "../services/profession.service";
 

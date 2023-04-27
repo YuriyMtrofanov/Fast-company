@@ -10,9 +10,11 @@ import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getQualities, getQualitiesLoadingStatus } from "../../../store/qualities";
 import { getProfessions, getProfessionsLoadStatus } from "../../../store/professions";
+import { getCurrentUserData } from "../../../store/users";
 
 const EditUserPage = () => {
-    const { currentUser, editUserInfo } = useAuth();
+    const { editUserInfo } = useAuth(); // Вот с этим методом нужно будет поработать
+    const currentUser = useSelector(getCurrentUserData());
     const [data, setData] = useState();
     const professions = useSelector(getProfessions());
     const professionsLoading = useSelector(getProfessionsLoadStatus());

@@ -4,9 +4,10 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.css";
 import App from "./app/App";
-import { BrowserRouter } from "react-router-dom";
+import { Router } from "react-router-dom";
 import { createStore } from "./app/store/createStore";
 import { Provider } from "react-redux";
+import customHistory from "./app/utils/history";
 
 const store = createStore();
 
@@ -14,9 +15,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     // <React.StrictMode>
     <Provider store = { store }>
-        <BrowserRouter>
+        <Router history = { customHistory }>
             <App />
-        </BrowserRouter>
+        </Router>
     </Provider>
     // </React.StrictMode>
 );

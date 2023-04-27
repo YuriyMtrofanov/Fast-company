@@ -7,16 +7,17 @@ import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
 import PropTypes from "prop-types";
 import TextField from "../../common/form/textField";
-import { useUser } from "../../../hooks/useUsers";
-// import { useProfessions } from "../../../hooks/useProfession";
-import { useAuth } from "../../../hooks/useAuth";
+// import { useUser } from "../../../hooks/useUsers";
+// import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getProfessions, getProfessionsLoadStatus } from "../../../store/professions";
+import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const usersListPage = () => {
-    // const [users, setUsers] = useState();
-    const { users } = useUser();
-    const { currentUser } = useAuth();
+    // const { users } = useUser();
+    // const { currentUser } = useAuth();
+    const users = useSelector(getUsersList());
+    const currentUserId = useSelector(getCurrentUserId());
     const [currentPage, setCurrentPage] = useState(1);
     const professions = useSelector(getProfessions());
     const professionsIsLoading = useSelector(getProfessionsLoadStatus());
@@ -62,7 +63,7 @@ const usersListPage = () => {
     };
 
     const handleInputChange = (target) => {
-        console.log(target);
+        // console.log(target);
         handleClearList();
         setInputData(target.value);
     };
@@ -79,7 +80,7 @@ const usersListPage = () => {
         } else if (selectedProperty) {
             filteredUsers = data.filter(user => user.profession === selectedProperty._id);
         };
-        return filteredUsers.filter((user) => user._id !== currentUser._id); // Данный фильтр позволяет не отображать залогененного юзера в общем списке юзеров
+        return filteredUsers.filter((user) => user._id !== currentUserId); // Данный фильтр позволяет не отображать залогененного юзера в общем списке юзеров
     };
 
     const filteredUsers = filterUsers(users);
