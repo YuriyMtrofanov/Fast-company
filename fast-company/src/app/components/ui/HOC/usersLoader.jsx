@@ -8,7 +8,7 @@ const UsersLoader = ({ children }) => {
     const dataStatus = useSelector(getDataStatus());
     useEffect(() => {
         if (!dataStatus) {
-            console.log("usersLoader, dataStatus", dataStatus);
+            // console.log("usersLoader, dataStatus", dataStatus);
             dispatch(loadUsersList());
         }
     }, []);

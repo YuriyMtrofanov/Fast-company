@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { validator } from "../../../utils/validator";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/backButton";
-import { useAuth } from "../../../hooks/useAuth";
-import { useSelector } from "react-redux";
+// import { useAuth } from "../../../hooks/useAuth";
+import { useDispatch, useSelector } from "react-redux";
 import { getQualities, getQualitiesLoadingStatus } from "../../../store/qualities";
 import { getProfessions, getProfessionsLoadStatus } from "../../../store/professions";
-import { getCurrentUserData } from "../../../store/users";
+import { editUserInfo, getCurrentUserData } from "../../../store/users";
 
 const EditUserPage = () => {
-    const { editUserInfo } = useAuth(); // Вот с этим методом нужно будет поработать
+    // const { editUserInfo } = useAuth(); // Вот с этим методом нужно будет поработать
+    const dispatch = useDispatch();
     const currentUser = useSelector(getCurrentUserData());
     const [data, setData] = useState();
     const professions = useSelector(getProfessions());
@@ -31,7 +31,6 @@ const EditUserPage = () => {
     }));
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const history = useHistory();
 
     const getQualitiesById = (qualitiesIds) => {
         const qualitiesArray = [];
@@ -121,14 +120,16 @@ const EditUserPage = () => {
             sex: data.sex,
             qualities: data.qualities.map((q) => q.value)
         };
-        try {
-            await editUserInfo(newData);
-        } catch (error) {
-            setErrors(error);
-        } finally {
-            history.push(`/users/${currentUser._id}`);
-            setIsLoading(false);
-        }
+        // console.log("editUserPage, newData", newData);
+        dispatch(editUserInfo(newData));
+        // try {
+        //     await editUserInfo(newData);
+        // } catch (error) {
+        //     setErrors(error);
+        // } finally {
+        //     history.push(`/users/${currentUser._id}`);
+        //     setIsLoading(false);
+        // }
     };
 
     useEffect(() => {

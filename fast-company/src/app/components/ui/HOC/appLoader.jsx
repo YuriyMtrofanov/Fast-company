@@ -12,6 +12,7 @@ const AppLoader = ({ children }) => {
     useEffect(() => {
         dispatch(loadQualitiesList());
         dispatch(loadProfessionsList());
+        console.log("AppLoader isLoggedIn", isLoggedIn)
         if (isLoggedIn) {
             dispatch(getUsersList());
         }

@@ -6,7 +6,7 @@ const professionsSlice = createSlice({
     initialState: {
         entities: null,
         isLoading: true,
-        error: []
+        error: null
         // lastFetch: null
     },
     reducers: {
