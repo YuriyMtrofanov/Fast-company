@@ -61,10 +61,13 @@ const usersSlice = createSlice({
             if (!Array.isArray(state.entities)) {
                 state.entities = [];
             }
-            state.entities.map(user => user._id !== state.auth.userId
-                ? user
-                : action.payload
-            );
+            // state.entities.map(user => user._id !== state.auth.userId
+            //     ? user
+            //     : action.payload
+            // );
+            state.entities[state.entities.findIndex((user) =>
+                user._id === action.payload._id
+            )] = action.payload;
         },
         // userEditedFailed зададим через createAction("users/userEditedFailed")
         userLoggedOut: (state, action) => {
@@ -110,7 +113,7 @@ export const login = ({ payload, redirect }) => async (dispatch) => {
 export const logout = () => (dispatch) => {
     localStorageService.removeAuthData();
     dispatch(userLoggedOut());
-    customHistory.push("/");
+    customHistory.push("/users");
 };
 
 // Функция создания юзера. Диспатчится после успешной авторизации. Т.е. вызывается в "signUp" после dispatch(authRequestedSuccess())
@@ -119,7 +122,7 @@ const createUser = (payload) => async (dispatch, getState) => {
     try {
         const { content } = await userService.create(payload);
         dispatch(userCreated(content)); // setUser(content);
-        customHistory.push("users/");
+        customHistory.push("/users");
     } catch (error) {
         dispatch(userCreatedFailed(error.message));
     }
@@ -130,7 +133,7 @@ export const editUserInfo = (payload) => async (dispatch, getState) => {
     try {
         const { content } = await userService.update(payload);
         dispatch(userEdited(content)); // content === action.payload
-        customHistory.push("/");
+        customHistory.push(`/users/${content._id}`);
     } catch (error) {
         dispatch(userEditedFailed(error.message));
     }

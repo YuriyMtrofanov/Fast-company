@@ -120,16 +120,7 @@ const EditUserPage = () => {
             sex: data.sex,
             qualities: data.qualities.map((q) => q.value)
         };
-        // console.log("editUserPage, newData", newData);
         dispatch(editUserInfo(newData));
-        // try {
-        //     await editUserInfo(newData);
-        // } catch (error) {
-        //     setErrors(error);
-        // } finally {
-        //     history.push(`/users/${currentUser._id}`);
-        //     setIsLoading(false);
-        // }
     };
 
     useEffect(() => {
