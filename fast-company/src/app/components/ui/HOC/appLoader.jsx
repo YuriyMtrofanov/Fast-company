@@ -12,9 +12,10 @@ const AppLoader = ({ children }) => {
     useEffect(() => {
         dispatch(loadQualitiesList());
         dispatch(loadProfessionsList());
-        console.log("AppLoader isLoggedIn", isLoggedIn)
+        // console.log("AppLoader isLoggedIn", isLoggedIn)
         if (isLoggedIn) {
             dispatch(getUsersList());
+            dispatch(loadCommentsList());
         }
     }, [isLoggedIn]);
     if (usersStatusLoading) return "loading..."
