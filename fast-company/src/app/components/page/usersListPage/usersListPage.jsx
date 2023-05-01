@@ -7,15 +7,11 @@ import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
 import PropTypes from "prop-types";
 import TextField from "../../common/form/textField";
-// import { useUser } from "../../../hooks/useUsers";
-// import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getProfessions, getProfessionsLoadStatus } from "../../../store/professions";
 import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const usersListPage = () => {
-    // const { users } = useUser();
-    // const { currentUser } = useAuth();
     const users = useSelector(getUsersList());
     const currentUserId = useSelector(getCurrentUserId());
     const [currentPage, setCurrentPage] = useState(1);

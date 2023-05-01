@@ -21,15 +21,10 @@ const commentsSlice = createSlice({
             state.isLoading = false;
         },
         commentCreateSuccessed: (state, action) => {
-            if (!Array.isArray(state.entities)) {
-                state.entities = [];
-            }
-            state.entities[
-                state.entities.findIndex((comment) => comment._id === action.payload._id)
-            ] = action.payload;
+            state.entities.push(action.payload);
         },
         commentRemoveSuccessed: (state, action) => {
-            state.entities.filter(comment => comment._id !== action.payload);
+            state.entities = state.entities.filter(comment => comment._id !== action.payload);
         }
     }
 });
@@ -59,7 +54,7 @@ export const loadCommentsList = (userId) => async (dispatch, getState) => {
 };
 
 export const createComment = (payload) => async (dispatch) => {
-    dispatch(commentCreateRequest());
+    dispatch(commentCreateRequest(payload));
     try {
         const { content } = await commentService.createComment(payload);
         dispatch(commentCreateSuccessed(content));
