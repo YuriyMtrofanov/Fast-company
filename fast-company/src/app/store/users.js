@@ -2,7 +2,7 @@ import { createAction, createSlice } from "@reduxjs/toolkit";
 import userService from "../services/user.service";
 import authService from "../services/auth.service";
 import localStorageService from "../services/localStorage.service";
-import randomInt from "../utils/randomInt";
+// import randomInt from "../utils/randomInt";
 import customHistory from "../utils/history";
 
 const initialState = localStorageService.getAccessToken()
@@ -86,14 +86,14 @@ const {
     usersRequestFailed,
     authRequestedSuccess,
     authRequestedFailed,
-    userCreated,
+    // userCreated,
     userLoggedOut,
     userEdited
 } = actions;
 
 const authRequested = createAction("users/authRequested");
-const userCreateRequested = createAction("users/userCreateRequested");
-const userCreatedFailed = createAction("users/userCreatedFailed");
+// const userCreateRequested = createAction("users/userCreateRequested");
+// const userCreatedFailed = createAction("users/userCreatedFailed");
 const userEditedRequested = createAction("users/userEditedRequested");
 const userEditedFailed = createAction("users/userEditedFailed");
 
@@ -117,16 +117,16 @@ export const logout = () => (dispatch) => {
 };
 
 // Функция создания юзера. Диспатчится после успешной авторизации. Т.е. вызывается в "signUp" после dispatch(authRequestedSuccess())
-const createUser = (payload) => async (dispatch, getState) => {
-    dispatch(userCreateRequested());
-    try {
-        const { content } = await userService.create(payload);
-        dispatch(userCreated(content)); // setUser(content);
-        customHistory.push("/users");
-    } catch (error) {
-        dispatch(userCreatedFailed(error.message));
-    }
-};
+// const createUser = (payload) => async (dispatch, getState) => {
+//     dispatch(userCreateRequested());
+//     try {
+//         const { content } = await userService.create(payload);
+//         dispatch(userCreated(content)); // setUser(content);
+//         customHistory.push("/users");
+//     } catch (error) {
+//         dispatch(userCreatedFailed(error.message));
+//     }
+// };
 
 export const editUserInfo = (payload) => async (dispatch, getState) => {
     dispatch(userEditedRequested());
@@ -139,24 +139,28 @@ export const editUserInfo = (payload) => async (dispatch, getState) => {
     }
 };
 
-export const signUp = ({ email, password, ...rest }) => async (dispatch, getState) => {
+// export const signUp = ({ email, password, ...rest }) => async (dispatch, getState) => {
+export const signUp = (payload) => async (dispatch, getState) => {
     dispatch(authRequested());
     try {
-        const data = await authService.register({ email, password });
+        // const data = await authService.register({ email, password });
+        const data = await authService.register(payload);
         localStorageService.setTokens(data);
-        dispatch(authRequestedSuccess({ userId: data.localId }));
-        dispatch(createUser({
-            _id: data.localId,
-            email,
-            rate: randomInt(1, 5),
-            completedMeetings: randomInt(0, 200),
-            image: `https://avatars.dicebear.com/api/avataaars/${(
-                Math.random() + 1
-            )
-                .toString(36)
-                .substring(7)}.svg`,
-            ...rest
-        }));
+        // dispatch(authRequestedSuccess({ userId: data.localId }));
+        dispatch(authRequestedSuccess({ userId: data.userId }));
+        // history.push("/users");
+        // dispatch(createUser({
+        //     _id: data.localId,
+        //     email,
+        //     rate: randomInt(1, 5),
+        //     completedMeetings: randomInt(0, 200),
+        //     image: `https://avatars.dicebear.com/api/avataaars/${(
+        //         Math.random() + 1
+        //     )
+        //         .toString(36)
+        //         .substring(7)}.svg`,
+        //     ...rest
+        // }));
     } catch (error) {
         dispatch(authRequestedFailed(error.message));
     }

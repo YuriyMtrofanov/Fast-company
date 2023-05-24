@@ -10,13 +10,14 @@ const http = axios.create({
 
 http.interceptors.request.use(
     async function (config) {
+        const expiresDate = localStorageService.getTokenExpiresDate();
+        const refreshToken = localStorageService.getRefreshToken();
         if (configFile.isFireBase) {
             const containSlash = /\/$/gi.test(config.url);
             config.url =
                 (containSlash ? config.url.slice(0, -1) : config.url) + ".json";
-            const expiresDate = localStorageService.getTokenExpiresDate();
-            const refreshToken = localStorageService.getRefreshToken();
-            if (refreshToken && expiresDate < Date.now()) {
+            // условие для работы с firebase
+            if (refreshToken && expiresDate < Date.now()) { // Строчка повторяется, поэтому её можно сохранить в константу isExpired
                 // const { data } = await httpAuth.post("token", {
                 //     grant_type: "refresh_token",
                 //     refresh_token: refreshToken
@@ -32,6 +33,27 @@ http.interceptors.request.use(
             const accessToken = localStorageService.getAccessToken();
             if (accessToken) {
                 config.params = { ...config.params, auth: accessToken };
+            }
+        } else {
+            // условие для работы с localhost
+            if (refreshToken && expiresDate < Date.now()) { // Строчка повторяется, поэтому её можно сохранить в константу isExpired
+                const data = await authService.refresh();
+                // в данном случае все ключи данных одинаковые, поэтому просто пишем data
+                // localStorageService.setTokens({
+                //     refreshToken: data.refreshToken,
+                //     accessToken: data.accessToken,
+                //     expiresIn: data.expiresIn,
+                //     userId: data.userId
+                // });
+                localStorageService.setTokens(data);
+                // console.log("authService data: ", data);
+            }
+            const accessToken = localStorageService.getAccessToken();
+            if (accessToken) {
+                config.headers = {
+                    ...config.headers,
+                    Authorization: `Bearer ${accessToken}`
+                };
             }
         }
         return config;
@@ -52,7 +74,8 @@ http.interceptors.response.use(
         if (configFile.isFireBase) {
             res.data = { content: transformData(res.data) };
         }
-        // console.log("res.data.content", res.data.content);
+        // console.log("res.data.content", res.data);
+        res.data = { content: res.data }; // для работы с localhost
         return res;
     },
     function (error) {

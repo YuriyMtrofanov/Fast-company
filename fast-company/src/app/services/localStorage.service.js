@@ -4,16 +4,20 @@ const EXPIRES_KEY = "jwt-expires";
 const USERID_KEY = "user-local-id";
 
 export function setTokens({
-    refreshToken,
-    idToken,
-    localId,
-    expiresIn = 3600
+    refreshToken, // для firebase и localhost
+    // idToken, // для firebase
+    accessToken, // для localhost
+    // localId, // для firebase
+    userId, // для localhost
+    expiresIn = 3600 // для firebase и localhost
 }) {
     const expiresDate = new Date().getTime() + expiresIn * 1000;
-    localStorage.setItem(USERID_KEY, localId);
-    localStorage.setItem(TOKEN_KEY, idToken);
-    localStorage.setItem(REFRESH_KEY, refreshToken);
-    localStorage.setItem(EXPIRES_KEY, expiresDate);
+    // localStorage.setItem(USERID_KEY, localId); // для firebase
+    localStorage.setItem(USERID_KEY, userId); // для localhost
+    // localStorage.setItem(TOKEN_KEY, idToken); // для firebase
+    localStorage.setItem(TOKEN_KEY, accessToken); // для localhost
+    localStorage.setItem(REFRESH_KEY, refreshToken); // и для firebase и localhost
+    localStorage.setItem(EXPIRES_KEY, expiresDate); // и для firebase и localhost
 }
 export function getAccessToken() {
     return localStorage.getItem(TOKEN_KEY);
